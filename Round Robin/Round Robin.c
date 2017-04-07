@@ -396,7 +396,7 @@ void mudaEstado(tipoLista **l){
 }
 
 int main(){
-    unsigned int alpha = 200;
+    unsigned int alpha = 100;
     unsigned int t = 0;
     tipoStats estatisticas = {0,0,0,0,0,0,0,0};
     FILE *file;
@@ -404,9 +404,11 @@ int main(){
     tipoLista *lote;
     tipoLista *listaProcessos;
     tipoLista *listaBloqueados;
+	tipoLista *listaSuspensos;
     lote = inicializaLista(0);
-    listaProcessos = inicializaLista(4);
+    listaProcessos = inicializaLista(2);
     listaBloqueados = inicializaLista(0);
+	listaSuspensos = inicializaLista(0);
     file = fopen("cenario5.txt","r");
     file2 = fopen("./Round_Robin_Saida/saidacenario5.2.txt","w");
     if(file == NULL || file2 == NULL){
