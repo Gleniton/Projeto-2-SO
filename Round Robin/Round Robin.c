@@ -23,7 +23,14 @@
 	.tempoSubmetido
 */
 
+struct listaPaginas{
+	tipoPagina pagina;
+	unsigned int tempo;
+	struct listaPaginas *proximo;
+}typedef struct listaPaginas tipoListaPaginas;
+
 struct processo{
+	tipoListaPaginas *cabecaPg;
 	unsigned int id;
 	unsigned int status;
 	unsigned int priority;
