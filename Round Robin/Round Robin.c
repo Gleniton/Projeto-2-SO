@@ -418,24 +418,38 @@ int main(){
         carregaLote(file, &lote);
         while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos != 0){
             //printf("t = %d\n", t);
+			//cria novos processos
             while(((listaProcessos->nElementos + listaBloqueados->nElementos) < alpha) && lote->nElementos != 0){
                 if(!(criaProcessos(&lote, &listaProcessos, t))){
                     break;
                 }
             }
+			//Se um processo atingiu seu tempo máximo de execução, é jogado para o final da fila
+			if(listaProcessos->atingiuQuantumMaximo == 1){
+                enviaElementoParaFinalDaLista(&listaProcessos);
+                listaProcessos->atingiuQuantumMaximo = 0;
+            }
+			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
+			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
+			if(lote->nElementos == 0)	enviaTodosChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
             executaProcesso(&listaProcessos);
             calculaEstatisticas(&listaProcessos, t);
             calculaEstatisticas(&listaBloqueados, t);
+			calculaEstatisticas(&listaSuspensos, t);
             mudaEstado(&listaProcessos);
             mudaEstado(&listaBloqueados);
+			mudaEstado(&listaSuspensos);
+			//Remove processos que foram terminados
             removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);
-            enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaBloqueados, BLOQUEADO);
-            if(listaProcessos->atingiuQuantumMaximo == 1){
-                enviaElementoParaFinalDaLista(&listaProcessos);
-                listaProcessos->atingiuQuantumMaximo = 0;
-            }
+			//Coleta processos suspensos ou bloqueados e os envia para suas respectivas listas
+			if(lote->nElementos > 0){
+				enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaSuspensos, SUSPENSO);
+			}
+			else{
+				enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaBloqueados, BLOQUEADO);
+			}
         t++;
         }
         estatisticas.duracaoDaSimulacao = t;
