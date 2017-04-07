@@ -1,3 +1,4 @@
+//comment
 struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
