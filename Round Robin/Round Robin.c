@@ -401,6 +401,7 @@ int main(){
     tipoStats estatisticas = {0,0,0,0,0,0,0,0};
     FILE *file;
     FILE *file2;
+	FILE *file3;
     tipoLista *lote;
     tipoLista *listaProcessos;
     tipoLista *listaBloqueados;
@@ -409,8 +410,9 @@ int main(){
     listaProcessos = inicializaLista(2);
     listaBloqueados = inicializaLista(0);
 	listaSuspensos = inicializaLista(0);
-    file = fopen("cenario5.txt","r");
+    file = fopen("cenario1.txt","r");
     file2 = fopen("./Round_Robin_Saida/saidacenario5.2.txt","w");
+	file3 = fopen("referencias1.txt", "r");
     if(file == NULL || file2 == NULL){
         printf("Erro ao abrir arquivos.\n");
     }
@@ -473,5 +475,6 @@ int main(){
     }
     fclose(file);
     fclose(file2);
+	fclose(file3);
     return 0;
 }
