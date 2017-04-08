@@ -434,7 +434,7 @@ int main(){
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
 			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
-			if(lote->nElementos == 0)	enviaTodosChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
+			if(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < alpha)	enviaTodosChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
             executaProcesso(&listaProcessos);
             calculaEstatisticas(&listaProcessos, t);
