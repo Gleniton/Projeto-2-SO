@@ -462,7 +462,7 @@ int main(){
         estatisticas.usoProcessador = estatisticas.servicoMedio/estatisticas.duracaoDaSimulacao;
         estatisticas.servicoMedio = estatisticas.servicoMedio/estatisticas.nProcessos;
         fprintf(file2, "_______________________________\n");
-        fprintf(file2, "Round Robin\n");
+        fprintf(file2, "Round and Robin\n");
         fprintf(file2, "Alpha: %d\n", alpha);
         fprintf(file2, "Número de Processos: %d\n", estatisticas.nProcessos);
         fprintf(file2, "Tempo de retorno médio: %f\n", estatisticas.retornoMedio);
