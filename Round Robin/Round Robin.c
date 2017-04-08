@@ -7,6 +7,8 @@
 #define BLOQUEADO 3
 #define TERMINADO 4
 #define SUSPENSO 5
+#define TAMQUADROS 40
+#define ALPHA 100
 
 /*
 	.id
@@ -115,8 +117,40 @@ void carregaLote(FILE* file, tipoLista** l){
 		processoNovo.tempoExecutando = 0;
 		processoNovo.tempoBloqueado = 0;
 		processoNovo.tempoSubmetido = 0;
+		processoNovo.cabecaPg = NULL;
 		insereElementoListaNoFinal(l, processoNovo);
     }
+}
+
+void carregaListaDePaginas(FILE* file3, tipoLista** l){
+	tipoNoh *pAtual;
+	pAtual = (*l)->cabeca;
+	tipoListaPaginas *lp;
+	tipoListaPaginas *pgAtual;
+	char aux;
+	unsigned int idCorrigida;
+	while(pAtual != NULL){
+		//lembrar de inicializar todos atributos de lp
+		fscanf("%d, ", &idCorrigida);
+		idCorrigida++;
+		do{
+			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
+			lp->pagina->id = idCorrigida;
+			lp->proximo = NULL;
+			fscanf("%d:%d, %c", &(lp->tempo), &(lp->pagina->nPagina), &aux);
+			if(pAtual->processo->cabecaPg == NULL){
+				pAtual->processo->cabecaPg = lp;
+			}
+			else{
+				pgAtual = pAtual->processo->cabecaPg;
+				while(pgAtual->proximo != NULL){
+					pgAtual = pgAtual->proximo;
+				}
+				pgAtual->proximo = lp;
+			}
+		}while(aux != '\n');
+		pAtual = pAtual->proximo;
+	}
 }
 
 unsigned int criaProcessos(tipoLista **l1, tipoLista **l2, unsigned int t){
@@ -395,10 +429,14 @@ void mudaEstado(tipoLista **l){
     }
 }
 
+void inicializaQuadros(tipoQuadro *q){	
+	
+}
+
 int main(){
-    unsigned int alpha = 100;
     unsigned int t = 0;
     tipoStats estatisticas = {0,0,0,0,0,0,0,0};
+	tipoQuadro quadros;
     FILE *file;
     FILE *file2;
 	FILE *file3;
@@ -421,7 +459,7 @@ int main(){
         while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos != 0){
             //printf("t = %d\n", t);
 			//cria novos processos
-            while(((listaProcessos->nElementos + listaBloqueados->nElementos) < alpha) && lote->nElementos != 0){
+            while(((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA) && lote->nElementos != 0){
                 if(!(criaProcessos(&lote, &listaProcessos, t))){
                     break;
                 }
@@ -434,7 +472,7 @@ int main(){
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
 			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
-			if(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < alpha)	enviaTodosChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
+			if(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA)	enviaTodosChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
             executaProcesso(&listaProcessos);
             calculaEstatisticas(&listaProcessos, t);
@@ -463,7 +501,7 @@ int main(){
         estatisticas.servicoMedio = estatisticas.servicoMedio/estatisticas.nProcessos;
         fprintf(file2, "_______________________________\n");
         fprintf(file2, "Round and Robin\n");
-        fprintf(file2, "Alpha: %d\n", alpha);
+        fprintf(file2, "Alpha: %d\n", ALPHA);
         fprintf(file2, "Número de Processos: %d\n", estatisticas.nProcessos);
         fprintf(file2, "Tempo de retorno médio: %f\n", estatisticas.retornoMedio);
         fprintf(file2, "Tempo de serviço médio: %f\n", estatisticas.servicoMedio);
