@@ -86,31 +86,29 @@ tipoLista* inicializaLista(unsigned int quantum){
 	return novaLista;
 }
 
-void insereElementoListaNoFinal(tipoLista **l, tipoProcesso processoRecebido){
+void insereElementoListaNoFinal(tipoLista **l, tipoNoh *novoNoh){
     //Insere elementos no final da lista
-	tipoNoh *novoElemento;
 	tipoNoh *pAtual;
-	novoElemento = (tipoNoh*)malloc(sizeof(tipoNoh));
-	novoElemento->processo = processoRecebido;
-	novoElemento->proximo = NULL;
+	novoNoh->proximo = NULL;
 	if((*l)->nElementos == 0){
-		(*l)->cabeca = novoElemento;
-		(*l)->cauda = novoElemento;
+		(*l)->cabeca = novoNoh;
+		(*l)->cauda = novoNoh;
 		(*l)->nElementos++;
 	}
 	else{
 		pAtual = (*l)->cauda;
-		pAtual->proximo = novoElemento;
-		(*l)->cauda = novoElemento;
+		pAtual->proximo = novoNoh;
+		(*l)->cauda = novoNoh;
 		(*l)->nElementos++;
 	}
 }
 
-void carregaLote(FILE* file, tipoLista** l){
+void carregaLote(FILE* file, tipoLista **l){
     //carrega processos do arquivo para uma lista LOTE
     tipoProcesso processoNovo;
+	tipoNoh *novoNoh;
     while((fscanf(file, "%u,%u,%u,%u,%u\n", &processoNovo.id, &processoNovo.submissionTime, &processoNovo.priority, &processoNovo.executionTime, &processoNovo.blockTime)) != EOF){
-        processoNovo.status = PRONTO;
+		processoNovo.status = PRONTO;
 		processoNovo.turnAroundTime = 0;
 		processoNovo.responseTime = 0;
 		processoNovo.waitingTime = 0;
@@ -118,11 +116,13 @@ void carregaLote(FILE* file, tipoLista** l){
 		processoNovo.tempoBloqueado = 0;
 		processoNovo.tempoSubmetido = 0;
 		processoNovo.cabecaPg = NULL;
-		insereElementoListaNoFinal(l, processoNovo);
+		novoNoh = (tipoNoh*)malloc(sizeof(tipoNoh));
+		novoNoh->processo = processoNovo;
+		insereElementoListaNoFinal(l, novoNoh);
     }
 }
 
-void carregaListaDePaginas(FILE* file3, tipoLista** l){
+void carregaListaDePaginas(FILE* file3, tipoLista **l){
 	tipoNoh *pAtual;
 	pAtual = (*l)->cabeca;
 	tipoListaPaginas *lp;
@@ -165,29 +165,26 @@ unsigned int criaProcessos(tipoLista **l1, tipoLista **l2, unsigned int t){
             pAtual->processo.tempoSubmetido = t;
             if(pAtual == (*l1)->cabeca){
                 (*l1)->cabeca = pAtual->proximo;
+				insereElementoListaNoFinal(l2, pAtual);
                 if((*l1)->cabeca == NULL){
                     (*l1)->cauda = NULL;
                 }
-                insereElementoListaNoFinal(l2, pAtual->processo);
                 (*l1)->nElementos--;
-                free(pAtual);
                 sucesso = 1;
                 break;
             }
             else if(pAtual == (*l1)->cauda){
-                pAnt->proximo = pAtual->proximo;
+                pAnt->proximo = NULL;
                 (*l1)->cauda = pAnt;
-                insereElementoListaNoFinal(l2, pAtual->processo);
+                insereElementoListaNoFinal(l2, pAtual);
                 (*l1)->nElementos--;
-                free(pAtual);
                 sucesso = 1;
                 break;
             }
             else{
                 pAnt->proximo = pAtual->proximo;
-                insereElementoListaNoFinal(l2, pAtual->processo);
+                insereElementoListaNoFinal(l2, pAtual);
                 (*l1)->nElementos--;
-                free(pAtual);
                 sucesso = 1;
                 break;
             }
@@ -208,24 +205,22 @@ void enviaPrimeiraChaveL1ParaL2(tipoLista **l1, tipoLista **l2, unsigned int cha
     pAnt = NULL;
     while(pAtual != NULL){
         if(pAnt == NULL && pAtual->processo.status == chave){
-            insereElementoListaNoFinal(l2, pAtual->processo);
             (*l1)->cabeca = pAtual->proximo;
+			insereElementoListaNoFinal(l2, pAtual);
 			if((*l1)->cabeca == NULL){
 				(*l1)->cauda = NULL;
             }
-            free(pAtual);
             pAtual = (*l1)->cabeca;
             (*l1)->nElementos--;
             break;
         }
         else if(pAnt != NULL && pAtual->processo.status == chave){
-            insereElementoListaNoFinal(l2, pAtual->processo);
-            if(pAtual->proximo == NULL){
+			pAnt->proximo = pAtual->proximo;
+            insereElementoListaNoFinal(l2, pAtual);
+			pAtual = pAnt->proximo;
+            if(pAtual == NULL){
                 (*l1)->cauda = pAnt;
             }
-            pAnt->proximo = pAtual->proximo;
-            free(pAtual);
-            pAtual = pAnt->proximo;
             (*l1)->nElementos--;
             break;
         }
@@ -244,23 +239,21 @@ void enviaTodosChaveL1ParaL2(tipoLista **l1, tipoLista **l2, unsigned int chave)
     pAnt = NULL;
     while(pAtual != NULL){
         if(pAnt == NULL && pAtual->processo.status == chave){
+			(*l1)->cabeca = pAtual->proximo;
             insereElementoListaNoFinal(l2, pAtual->processo);
-            (*l1)->cabeca = pAtual->proximo;
 			if((*l1)->cabeca == NULL){
                 (*l1)->cauda = NULL;
             }
-            free(pAtual);
             pAtual = (*l1)->cabeca;
             (*l1)->nElementos--;
         }
         else if(pAnt != NULL && pAtual->processo.status == chave){
-            insereElementoListaNoFinal(l2, pAtual->processo);
-            if(pAtual->proximo == NULL){
+			pAnt->proximo = pAtual->proximo;
+            insereElementoListaNoFinal(l2, pAtual);
+			pAtual = pAnt->proximo;
+            if(pAtual == NULL){
                 (*l1)->cauda = pAnt;
             }
-            pAnt->proximo = pAtual->proximo;
-            free(pAtual);
-            pAtual = pAnt->proximo;
             (*l1)->nElementos--;
         }
         else{
