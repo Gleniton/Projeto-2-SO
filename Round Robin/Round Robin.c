@@ -31,7 +31,7 @@ struct listaPaginas{
 	tipoPagina pagina;
 	unsigned int tempo;
 	struct listaPaginas *proximo;
-}typedef struct listaPaginas tipoListaPaginas;
+};typedef struct listaPaginas tipoListaPaginas;
 
 struct processo{
 	tipoListaPaginas *cabecaPg;

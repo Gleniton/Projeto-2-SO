@@ -1,14 +1,14 @@
 struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
-}typedef struct pagina tipoPagina;
+};typedef struct pagina tipoPagina;
 
 struct quadro{
 	tipoPagina p[TAMQUADROS];
 	unsigned int temQuadroLivre;
 	unsigned int nFaltas;
 	unsigned int ativaFaltas;
-}typedef struct quadro tipoQuadro;
+};typedef struct quadro tipoQuadro;
 
 struct processoLeve{
 	unsigned int status;
@@ -20,7 +20,7 @@ struct processoLeve{
 	unsigned int contador;
 	unsigned int quantum;
 	unsigned int atingiuQuantumMaximo;
-}typedef struct processoLeve tipoProcessoLeve;
+};typedef struct processoLeve tipoProcessoLeve;
 
 void simulaEstatisticasFuturo(tipoProcessoLeve *processoRecebido){
 	if(processoRecebido.status == PRONTO){

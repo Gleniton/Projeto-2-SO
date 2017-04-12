@@ -29,7 +29,7 @@ struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
 	unsigned int ordemInsercao; //comecar com 1
-}typedef struct pagina tipoPagina;
+};typedef struct pagina tipoPagina;
 
 struct quadro{
 	tipoPagina p[TAMQUADROS];
@@ -37,13 +37,13 @@ struct quadro{
 	unsigned int nFaltas;
 	unsigned int ativaFaltas;
 	unsigned int proximaInsercao; //começar com 1
-}typedef struct quadro tipoQuadro;
+};typedef struct quadro tipoQuadro;
 
 struct listaPaginas{
 	tipoPagina pagina;
 	unsigned int tempo;
 	struct listaPaginas *proximo;
-}typedef struct listaPaginas tipoListaPaginas;
+};typedef struct listaPaginas tipoListaPaginas;
 
 struct processo{
 	tipoListaPaginas *cabecaPg;
@@ -128,7 +128,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		else{
 			for(i = 1;i < TAMQUADROS;i++){
 				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao)
-					primeiroInserido = i; 
+					primeiroInserido = i;
 			}
 			q.p[primeiroInserido].id = idRecebida;
 			q.p[primeiroInserido].nPagina = pagRecebida;

@@ -2,7 +2,7 @@ struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
 	unsigned int ordemInsercao; //comecar com 1
-}typedef struct pagina tipoPagina;
+};typedef struct pagina tipoPagina;
 
 struct quadro{
 	tipoPagina p[TAMQUADROS];
@@ -10,7 +10,7 @@ struct quadro{
 	unsigned int nFaltas;
 	unsigned int ativaFaltas;
 	unsigned int proximaInsercao; //começar com 1
-}typedef struct quadro tipoQuadro;
+};typedef struct quadro tipoQuadro;
 
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
 	//miss = 0
