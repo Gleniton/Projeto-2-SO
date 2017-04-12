@@ -105,44 +105,44 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	unsigned int i;
 	unsigned int nQuadroLivre = 0;
 	unsigned int primeiroInserido = 0;
-	q.temQuadroLivre = 0;
+	q->temQuadroLivre = 0;
 	for(i = 0;i < TAMQUADROS;i++){
 		//verifica se deu HIT
-		if(q.p[i].id == idRecebida && q.p[i].nPagina == pagRecebida){
+		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida){
 			hit = 1;
 			break;
 		}
 		//verifica se tem algum quadro vazio
-		if(q.p[i].ordemInsercao == 0 && q.temQuadroLivre == 0){
-			q.temQuadroLivre = 1;
+		if(q->p[i].ordemInsercao == 0 && q->temQuadroLivre == 0){
+			q->temQuadroLivre = 1;
 			nQuadroLivre = i;
 		}
 	}
 	if(!hit){
-		if(q.temQuadroLivre){
-			q.p[nQuadroLivre].id = idRecebida;
-			q.p[nQuadroLivre].nPagina = pagRecebida;
-			q.p[nQuadroLivre].ordemInsercao = proximaInsercao;
-			q.proximaInsercao++;
+		if(q->temQuadroLivre){
+			q->p[nQuadroLivre].id = idRecebida;
+			q->p[nQuadroLivre].nPagina = pagRecebida;
+			q->p[nQuadroLivre].ordemInsercao = q->proximaInsercao;
+			q->proximaInsercao++;
 		}
 		else{
 			for(i = 1;i < TAMQUADROS;i++){
-				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao)
+				if(q->p[i].ordemInsercao < q->p[primeiroInserido].ordemInsercao)
 					primeiroInserido = i;
 			}
-			q.p[primeiroInserido].id = idRecebida;
-			q.p[primeiroInserido].nPagina = pagRecebida;
-			q.p[primeiroInserido].ordemInsercao = proximaInsercao;
-			q.proximaInsercao++;
+			q->p[primeiroInserido].id = idRecebida;
+			q->p[primeiroInserido].nPagina = pagRecebida;
+			q->p[primeiroInserido].ordemInsercao = q->proximaInsercao;
+			q->proximaInsercao++;
 		}
-		if(q.ativaFaltas) q.nFaltas++;
+		if(q->ativaFaltas) q->nFaltas++;
 	}
 	//ativar faltas
-	if(!q.ativaFaltas){
-		q.ativaFaltas = 1;
+	if(!q->ativaFaltas){
+		q->ativaFaltas = 1;
 		for(i = 0;i < TAMQUADROS;i++){
-			if(q.p[i].ordemInsercao == 0){
-				q.ativaFaltas = 0;
+			if(q->p[i].ordemInsercao == 0){
+				q->ativaFaltas = 0;
 				break;
 			}
 		}
@@ -220,14 +220,14 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 		idCorrigida++;
 		do{
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
-			lp->pagina->id = idCorrigida;
+			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%d:%d, %c", &(lp->tempo), &(lp->pagina->nPagina), &aux);
-			if(pAtual->processo->cabecaPg == NULL){
-				pAtual->processo->cabecaPg = lp;
+			fscanf(file3, "%d:%d, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
+			if(pAtual->processo.cabecaPg == NULL){
+				pAtual->processo.cabecaPg = lp;
 			}
 			else{
-				pgAtual = pAtual->processo->cabecaPg;
+				pgAtual = pAtual->processo.cabecaPg;
 				while(pgAtual->proximo != NULL){
 					pgAtual = pgAtual->proximo;
 				}
@@ -325,7 +325,7 @@ void enviaTodosChaveL1ParaL2(tipoLista **l1, tipoLista **l2, unsigned int chave)
     while(pAtual != NULL){
         if(pAnt == NULL && pAtual->processo.status == chave){
 			(*l1)->cabeca = pAtual->proximo;
-            insereElementoListaNoFinal(l2, pAtual->processo);
+            insereElementoListaNoFinal(l2, pAtual);
 			if((*l1)->cabeca == NULL){
                 (*l1)->cauda = NULL;
             }
@@ -448,13 +448,15 @@ void imprimeLista(tipoLista **l){
 	}
 }
 
-void executaProcesso(tipoLista **l){
+void executaProcesso(tipoLista **l, tipoQuadro *q){
 	tipoListaPaginas *pgAtual;
+	tipoNoh *pAtual;
+	pAtual = (*l)->cabeca;
     if((*l)->cabeca != NULL){
-		pgAtual = (*l)->cabeca->processo->cabecaPg;
+		pgAtual = (*l)->cabeca->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo->tempoExecutando){
-				gerenciaPaginas(q, pgAtual->pagina->id, pgAtual->pagina->nPagina);
+			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
+				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;
 		}
@@ -499,7 +501,7 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
         if(pAtual->processo.status == EXECUTANDO){
             if(pAtual->processo.tempoBloqueado + pAtual->processo.tempoExecutando == pAtual->processo.executionTime){
                 pAtual->processo.status = TERMINADO;
-				removePaginas(q, pgAtual->processo->id);
+				removePaginas(q, pAtual->processo.id);
                 (*l)->contador = 0;
             }
             if(pAtual->processo.tempoBloqueado != pAtual->processo.blockTime){
@@ -509,7 +511,7 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
 				else{
 					pAtual->processo.status = SUSPENSO;
 				}
-				removePaginas(q, pgAtual->processo->id);
+				removePaginas(q, pAtual->processo.id);
                 (*l)->contador = 0;
             }
             if((*l)->contador == (*l)->quantum){
@@ -568,7 +570,7 @@ int main(){
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
-            executaProcesso(&listaProcessos, t);
+            executaProcesso(&listaProcessos, &quadros);
             calculaEstatisticas(&listaProcessos, t);
             calculaEstatisticas(&listaBloqueados, t);
 			calculaEstatisticas(&listaSuspensos, t);

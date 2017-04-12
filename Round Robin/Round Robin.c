@@ -147,14 +147,14 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 		idCorrigida++;
 		do{
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
-			lp->pagina->id = idCorrigida;
+			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%d:%d, %c", &(lp->tempo), &(lp->pagina->nPagina), &aux);
-			if(pAtual->processo->cabecaPg == NULL){
-				pAtual->processo->cabecaPg = lp;
+			fscanf(file3, "%d:%d, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
+			if(pAtual->processo.cabecaPg == NULL){
+				pAtual->processo.cabecaPg = lp;
 			}
 			else{
-				pgAtual = pAtual->processo->cabecaPg;
+				pgAtual = pAtual->processo.cabecaPg;
 				while(pgAtual->proximo != NULL){
 					pgAtual = pgAtual->proximo;
 				}
@@ -252,7 +252,7 @@ void enviaTodosChaveL1ParaL2(tipoLista **l1, tipoLista **l2, unsigned int chave)
     while(pAtual != NULL){
         if(pAnt == NULL && pAtual->processo.status == chave){
 			(*l1)->cabeca = pAtual->proximo;
-            insereElementoListaNoFinal(l2, pAtual->processo);
+            insereElementoListaNoFinal(l2, pAtual);
 			if((*l1)->cabeca == NULL){
                 (*l1)->cauda = NULL;
             }
@@ -375,13 +375,13 @@ void imprimeLista(tipoLista **l){
 	}
 }
 
-void executaProcesso(tipoLista **l){
+void executaProcesso(tipoLista **l, tipoQuadro *q){
 	tipoListaPaginas *pgAtual;
     if((*l)->cabeca != NULL){
-		pgAtual = (*l)->cabeca->processo->cabecaPg;
+		pgAtual = (*l)->cabeca->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo->tempoExecutando){
-				gerenciaPaginas(q, pgAtual->pagina->id, pgAtual->pagina->nPagina);
+			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
+				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;
 		}
@@ -504,7 +504,7 @@ int main(){
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
-            executaProcesso(&listaProcessos, t);
+            executaProcesso(&listaProcessos, &quadros);
             calculaEstatisticas(&listaProcessos, t);
             calculaEstatisticas(&listaBloqueados, t);
 			calculaEstatisticas(&listaSuspensos, t);

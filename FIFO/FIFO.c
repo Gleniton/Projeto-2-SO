@@ -22,41 +22,41 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	q.temQuadroLivre = 0;
 	for(i = 0;i < TAMQUADROS;i++){
 		//verifica se deu HIT
-		if(q.p[i].id == idRecebida && q.p[i].nPagina == pagRecebida){
+		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida){
 			hit = 1;
 			break;
 		}
 		//verifica se tem algum quadro vazio
-		if(q.p[i].ordemInsercao == 0 && q.temQuadroLivre == 0){
-			q.temQuadroLivre = 1;
+		if(q->p[i].ordemInsercao == 0 && q->temQuadroLivre == 0){
+			q->temQuadroLivre = 1;
 			nQuadroLivre = i;
 		}
 	}
 	if(!hit){
-		if(q.temQuadroLivre){
-			q.p[nQuadroLivre].id = idRecebida;
-			q.p[nQuadroLivre].nPagina = pagRecebida;
-			q.p[nQuadroLivre].ordemInsercao = proximaInsercao;
-			q.proximaInsercao++;
+		if(q->temQuadroLivre){
+			q->p[nQuadroLivre].id = idRecebida;
+			q->p[nQuadroLivre].nPagina = pagRecebida;
+			q->p[nQuadroLivre].ordemInsercao = q->proximaInsercao;
+			q->proximaInsercao++;
 		}
 		else{
 			for(i = 1;i < TAMQUADROS;i++){
-				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao)
+				if(q->p[i].ordemInsercao < q->p[primeiroInserido].ordemInsercao)
 					primeiroInserido = i; 
 			}
-			q.p[primeiroInserido].id = idRecebida;
-			q.p[primeiroInserido].nPagina = pagRecebida;
-			q.p[primeiroInserido].ordemInsercao = proximaInsercao;
-			q.proximaInsercao++;
+			q->p[primeiroInserido].id = idRecebida;
+			q->p[primeiroInserido].nPagina = pagRecebida;
+			q->p[primeiroInserido].ordemInsercao = q->proximaInsercao;
+			q->proximaInsercao++;
 		}
-		if(q.ativaFaltas) q.nFaltas++;
+		if(q->ativaFaltas) q->nFaltas++;
 	}
 	//ativar faltas
-	if(!q.ativaFaltas){
-		q.ativaFaltas = 1;
+	if(!q->ativaFaltas){
+		q->ativaFaltas = 1;
 		for(i = 0;i < TAMQUADROS;i++){
-			if(q.p[i].ordemInsercao == 0){
-				q.ativaFaltas = 0;
+			if(q->p[i].ordemInsercao == 0){
+				q->ativaFaltas = 0;
 				break;
 			}
 		}

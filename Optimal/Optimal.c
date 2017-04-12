@@ -139,20 +139,20 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	unsigned int nQuadroLivre = 0;
 	q.temQuadroLivre = 0;
 	for(i = 0;i < TAMQUADROS;i++){
-		if(q.p[i].id == idRecebida && q.p[i].nPagina == pagRecebida){
+		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida){
 			hit = 1;
 			break;
 		}
-		if(q.p[i].id == 0 && q.p[i].nPagina == 0 && q.temQuadroLivre == 0){
-			q.temQuadroLivre = 1;
+		if(q->p[i].id == 0 && q->p[i].nPagina == 0 && q->temQuadroLivre == 0){
+			q->temQuadroLivre = 1;
 			nQuadroLivre = i;
 		}
 	}
 	if(!hit){
-		if(q.temQuadroLivre){
-			q.p[nQuadroLivre].id = idRecebida;
-			q.p[nQuadroLivre].nPagina = pagRecebida;
-			if(q.ativaFaltas) q.nFaltas++;
+		if(q->temQuadroLivre){
+			q->p[nQuadroLivre].id = idRecebida;
+			q->p[nQuadroLivre].nPagina = pagRecebida;
+			if(q->ativaFaltas) q->nFaltas++;
 		}
 		else{
 			lp = criaListaSimulacao(l);
@@ -160,7 +160,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 				j = 0;
 				pgAtual = lp;
 				while(pgAtual != NULL){
-					if(pgAtual->pagina->id == q.p[i].id && pgAtual->pagina->nPagina == q.p[i].nPagina){
+					if(pgAtual->pagina.id == q->p[i].id && pgAtual->pagina.nPagina == q->p[i].nPagina){
 						if(distanciaExecucao < j){
 							quadroSubstituido = i;
 							distanciaExecucao = j;
@@ -178,17 +178,17 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 				if(achouSubstituto)
 					break;
 			}
-			q.p[quadroSubstituido].id = idRecebida;
-			q.p[quadroSubstituido].nPagina = pagRecebida;
-			if(q.ativaFaltas) q.nFaltas++;
+			q->p[quadroSubstituido].id = idRecebida;
+			q->p[quadroSubstituido].nPagina = pagRecebida;
+			if(q->ativaFaltas) q->nFaltas++;
 		}
 	}
 	//ativar faltas
-	if(!q.ativaFaltas){
-		q.ativaFaltas = 1;
+	if(!q->ativaFaltas){
+		q->ativaFaltas = 1;
 		for(i = 0;i < TAMQUADROS;i++){
-			if(q.p[i].id == 0 && q.p[i].nPagina == 0){
-				q.ativaFaltas = 0;
+			if(q->p[i].id == 0 && q->p[i].nPagina == 0){
+				q->ativaFaltas = 0;
 				break;
 			}
 		}
