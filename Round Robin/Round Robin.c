@@ -75,6 +75,16 @@ struct stats{
     unsigned int duracaoDaSimulacao;
 };typedef struct stats tipoStats;
 
+void inicializaQuadros(tipoQuadro *q){
+	int i;
+	q->temQuadroLivre = 0;
+	q->nFaltas = 0;
+	q->ativaFaltas = 0;
+	for(i = 0;i < TAMQUADROS;i++){
+		q->p[i].id = 0;
+		q->p[i].nPagina = 0;
+	}
+}
 
 tipoLista* inicializaLista(unsigned int quantum){
 	tipoLista *novaLista;
@@ -448,16 +458,7 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
     }
 }
 
-void inicializaQuadros(tipoQuadro *q){
-	int i;
-	q->temQuadroLivre = 0;
-	q->nFaltas = 0;
-	q->ativaFaltas = 0;
-	for(i = 0;i < TAMQUADROS;i++){
-		q->p[i].id = 0;
-		q->p[i].nPagina = 0;
-	}
-}
+
 
 int main(){
     unsigned int t = 0;
