@@ -10,9 +10,39 @@ struct quadro{
 	unsigned int ativaFaltas;
 }typedef struct quadro tipoQuadro;
 
+
+
+tipoListaPaginas* criaListaSimulacao(tipoLista *l){
+	tipoProcesso processoFuturo;
+	tipoNoh *pAtual;
+	tipoListaPaginas *lp;
+	tipoListaPaginas *pgAtual;
+	pAtual = (*l)->cabeca;
+	lp = NULL;
+	while(pAtual != NULL){
+		processoFuturo = pAtual->processo;
+		pgAtual = pAtual->processo->cabecaPg;
+		while(pgAtual != NULL){
+			if(pgAtual->tempo == t){
+				if(lp == NULL){
+					lp = pgAtual;
+				}
+				else{
+					
+				}
+			}
+			pgAtual = pgAtual->proximo;
+		}
+		
+		pAtual = pAtual->proximo;
+	}
+	return lp;
+}
+
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
 	//miss = 0
 	//hit = 1
+	tipoListaPaginas *lp;
 	unsigned int distanciaExecucao = 0;
 	unsigned int quadroSubstituido = 0;
 	unsigned int achouSubstituto = 0;
@@ -38,6 +68,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 			if(q.ativaFaltas) q.nFaltas++;
 		}
 		else{
+			lp = criaListaSimulacao();
 			for(i = 0;i < TAMQUADROS;i++){
 				j = 0;
 				pAtual = *l;
