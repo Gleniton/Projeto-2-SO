@@ -368,7 +368,6 @@ void imprimeLista(tipoLista **l){
 void executaProcesso(tipoLista **l, unsigned int t){
 	tipoListaPaginas *pgAtual;
     if((*l)->cabeca != NULL){
-        (*l)->cabeca->processo.status = EXECUTANDO;
 		pgAtual = (*l)->cabeca->processo->cabecaPg;
 		while(pgAtual != NULL){
 			if(pgAtual->tempo == t){
@@ -376,6 +375,7 @@ void executaProcesso(tipoLista **l, unsigned int t){
 			}
 			pgAtual = pgAtual->proximo;
 		}
+        (*l)->cabeca->processo.status = EXECUTANDO;
     }
 }
 

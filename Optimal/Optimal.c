@@ -10,36 +10,124 @@ struct quadro{
 	unsigned int ativaFaltas;
 }typedef struct quadro tipoQuadro;
 
+struct processoLeve{
+	unsigned int status;
+	unsigned int executionTime;
+	unsigned int blockTime;
+	unsigned int waitingTime; //tempo esperando na fila de pronto
+	unsigned int tempoExecutando;  //tempo gasto executando
+	unsigned int tempoBloqueado; //tempo gasto bloqueado
+	unsigned int contador;
+	unsigned int quantum;
+	unsigned int atingiuQuantumMaximo;
+}typedef struct processoLeve tipoProcessoLeve;
 
+void simulaEstatisticasFuturo(tipoProcessoLeve *processoRecebido, unsigned int t){
+	if(processoRecebido.status == PRONTO){
+        processoRecebido.waitingTime++;
+    }
+    if(processoRecebido.status == BLOQUEADO){
+        processoRecebido.tempoBloqueado++;
+    }
+    if(processoRecebido.status == EXECUTANDO){
+        processoRecebido.tempoExecutando++;
+        processoRecebido.contador++;
+    }
+}
 
-tipoListaPaginas* criaListaSimulacao(tipoLista *l){
-	tipoProcesso processoFuturo;
+void simulaEstadoFuturo(tipoProcessoLeve *processoRecebido){
+    if(processoRecebido.status == PRONTO){
+	
+    }
+    if(processoRecebido.status == BLOQUEADO){
+        if(processoRecebido.tempoBloqueado == processoRecebido.blockTime){
+            processoRecebido.status = PRONTO;
+        }
+    }
+    if(processoRecebido.status == EXECUTANDO){
+        if(processoRecebido.tempoBloqueado + processoRecebido.tempoExecutando == processoRecebido.executionTime){
+            processoRecebido.status = TERMINADO;
+            processoRecebido.contador = 0;
+        }
+        if(processoRecebido.tempoBloqueado != processoRecebido.blockTime){
+			processoRecebido.status = BLOQUEADO;
+			processoRecebido.contador = 0;
+        }
+        if(processoRecebido.contador == processoRecebido.quantum){
+            processoRecebido.status = PRONTO;
+            processoRecebido.contador = 0;
+            processoRecebido.atingiuQuantumMaximo = 1;
+        }
+    }
+}
+
+tipoListaPaginas* criaListaSimulacao(tipoLista **l, unsigned int t){
+	tipoProcessoLeve processoFuturo;
 	tipoNoh *pAtual;
 	tipoListaPaginas *lp;
+	tipoListaPaginas *iteraLp;
+	tipoListaPaginas *novaPagina;
 	tipoListaPaginas *pgAtual;
 	pAtual = (*l)->cabeca;
 	lp = NULL;
 	while(pAtual != NULL){
-		processoFuturo = pAtual->processo;
+		processoFuturo.status = EXECUTANDO;
+		processoFuturo.executionTime = pAtual->processo.executionTime;
+		processoFuturo.blockTime = pAtual->processo.blockTime;
+		processoFuturo.waitingTime = pAtual->processo.waitingTime;
+		processoFuturo.tempoExecutando = pAtual->processo.tempoExecutando;
+		processoFuturo.tempoBloqueado = pAtual->processo.tempoBloqueado;
+		processoFuturo.atingiuQuantumMaximo = 0;
+		processoFuturo.contador = (*l)->contador;
+		processoFuturo.quantum = (*l)->quantum;
 		pgAtual = pAtual->processo->cabecaPg;
 		while(pgAtual != NULL){
 			if(pgAtual->tempo == t){
+			novaPagina = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
+			novaPagina->pagina = pgAtual->pagina;
+			novaPagina->tempo = pgAtual->tempo;
+			novaPagina->proximo = NULL;
 				if(lp == NULL){
-					lp = pgAtual;
+					lp = novaPagina;
+					iteraLp = lp;
 				}
 				else{
-					
+					iteraLp->proximo = novaPagina;
+					iteraLp = iteraLp->proximo;
 				}
 			}
 			pgAtual = pgAtual->proximo;
 		}
-		
+		simulaEstatisticas(&processoFuturo);
+		simulaEstado(&processoFuturo);
+		if(processoFuturo.status == EXECUTANDO){
+			t++;
+			pgAtual = pAtual->processo->cabecaPg;
+			while(pgAtual != NULL){
+				if(pgAtual->tempo == t){
+				novaPagina = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
+				novaPagina->pagina = pgAtual->pagina;
+				novaPagina->tempo = pgAtual->tempo;
+				novaPagina->proximo = NULL;
+					if(lp == NULL){
+						lp = novaPagina;
+						iteraLp = lp;
+					}
+					else{
+						iteraLp->proximo = novaPagina;
+						iteraLp = iteraLp->proximo;
+					}
+				}
+				pgAtual = pgAtual->proximo;
+			}
+		}
+		t++;
 		pAtual = pAtual->proximo;
 	}
 	return lp;
 }
 
-void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
+void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida, tipoLista **l, unsigned int t){
 	//miss = 0
 	//hit = 1
 	tipoListaPaginas *lp;
@@ -68,7 +156,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 			if(q.ativaFaltas) q.nFaltas++;
 		}
 		else{
-			lp = criaListaSimulacao();
+			lp = criaListaSimulacao(l, t);
 			for(i = 0;i < TAMQUADROS;i++){
 				j = 0;
 				pAtual = *l;
