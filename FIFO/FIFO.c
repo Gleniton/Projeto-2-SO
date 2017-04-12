@@ -5,14 +5,12 @@ struct pagina{
 }typedef struct pagina tipoPagina;
 
 struct quadro{
-	tipoPagina p[40];
+	tipoPagina p[TAMQUADROS];
 	unsigned int temQuadroLivre;
 	unsigned int nFaltas;
 	unsigned int ativaFaltas;
 	unsigned int proximaInsercao; //começar com 1
 }typedef struct quadro tipoQuadro;
-
-tipoQuadro quadros[40];
 
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
 	//miss = 0
@@ -22,7 +20,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	unsigned int nQuadroLivre = 0;
 	unsigned int primeiroInserido = 0;
 	q.temQuadroLivre = 0;
-	for(i = 0;i < 40;i++){
+	for(i = 0;i < TAMQUADROS;i++){
 		//verifica se deu HIT
 		if(q.p[i].id == idRecebida && q.p[i].nPagina == pagRecebida){
 			hit = 1;
@@ -42,7 +40,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 			q.proximaInsercao++;
 		}
 		else{
-			for(i = 1;i < 40;i++){
+			for(i = 1;i < TAMQUADROS;i++){
 				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao) primeiroInserido = i; 
 			}
 			q.p[primeiroInserido].id = idRecebida;
@@ -55,7 +53,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	//ativar faltas
 	if(!q.ativaFaltas){
 		q.ativaFaltas = 1;
-		for(i = 0;i < 40;i++){
+		for(i = 0;i < TAMQUADROS;i++){
 			if(q.p[i].ordemInsercao == 0){
 				q.ativaFaltas = 0;
 				break;
