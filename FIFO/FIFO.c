@@ -41,7 +41,8 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		}
 		else{
 			for(i = 1;i < TAMQUADROS;i++){
-				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao) primeiroInserido = i; 
+				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao)
+					primeiroInserido = i; 
 			}
 			q.p[primeiroInserido].id = idRecebida;
 			q.p[primeiroInserido].nPagina = pagRecebida;
