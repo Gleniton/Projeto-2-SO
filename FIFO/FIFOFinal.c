@@ -25,7 +25,19 @@
 	.tempoSubmetido
 */
 
+struct pagina{
+	unsigned int id;
+	unsigned int nPagina;
+	unsigned int ordemInsercao; //comecar com 1
+}typedef struct pagina tipoPagina;
 
+struct quadro{
+	tipoPagina p[TAMQUADROS];
+	unsigned int temQuadroLivre;
+	unsigned int nFaltas;
+	unsigned int ativaFaltas;
+	unsigned int proximaInsercao; //come√ßar com 1
+}typedef struct quadro tipoQuadro;
 
 struct listaPaginas{
 	tipoPagina pagina;
@@ -41,13 +53,13 @@ struct processo{
 	unsigned int submissionTime;
 	unsigned int executionTime;
 	unsigned int blockTime;
-	unsigned int turnAroundTime; //tempo entre submeter o processo e complet·-lo
-	unsigned int responseTime; //tempo entre submeter o processo e ele comeÁar a executar
+	unsigned int turnAroundTime; //tempo entre submeter o processo e complet√°-lo
+	unsigned int responseTime; //tempo entre submeter o processo e ele come√ßar a executar
 	unsigned int waitingTime; //tempo esperando na fila de pronto
 	unsigned int tempoExecutando;  //tempo gasto executando
 	unsigned int tempoBloqueado; //tempo gasto bloqueado
 	unsigned int tempoSubmetido; //tempo em que o processo foi submetido
-	//throughput: numero de processos concluÌdos divido pelo tempo de simulaÁ„o total
+	//throughput: numero de processos conclu√≠dos divido pelo tempo de simula√ß√£o total
 };typedef struct processo tipoProcesso;
 
 struct noh{
@@ -83,6 +95,67 @@ void inicializaQuadros(tipoQuadro *q){
 	for(i = 0;i < TAMQUADROS;i++){
 		q->p[i].id = 0;
 		q->p[i].nPagina = 0;
+	}
+}
+
+void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
+	//miss = 0
+	//hit = 1
+	unsigned int hit = 0;
+	unsigned int i;
+	unsigned int nQuadroLivre = 0;
+	unsigned int primeiroInserido = 0;
+	q.temQuadroLivre = 0;
+	for(i = 0;i < TAMQUADROS;i++){
+		//verifica se deu HIT
+		if(q.p[i].id == idRecebida && q.p[i].nPagina == pagRecebida){
+			hit = 1;
+			break;
+		}
+		//verifica se tem algum quadro vazio
+		if(q.p[i].ordemInsercao == 0 && q.temQuadroLivre == 0){
+			q.temQuadroLivre = 1;
+			nQuadroLivre = i;
+		}
+	}
+	if(!hit){
+		if(q.temQuadroLivre){
+			q.p[nQuadroLivre].id = idRecebida;
+			q.p[nQuadroLivre].nPagina = pagRecebida;
+			q.p[nQuadroLivre].ordemInsercao = proximaInsercao;
+			q.proximaInsercao++;
+		}
+		else{
+			for(i = 1;i < TAMQUADROS;i++){
+				if(q.p[i].ordemInsercao < q.p[primeiroInserido].ordemInsercao)
+					primeiroInserido = i; 
+			}
+			q.p[primeiroInserido].id = idRecebida;
+			q.p[primeiroInserido].nPagina = pagRecebida;
+			q.p[primeiroInserido].ordemInsercao = proximaInsercao;
+			q.proximaInsercao++;
+		}
+		if(q.ativaFaltas) q.nFaltas++;
+	}
+	//ativar faltas
+	if(!q.ativaFaltas){
+		q.ativaFaltas = 1;
+		for(i = 0;i < TAMQUADROS;i++){
+			if(q.p[i].ordemInsercao == 0){
+				q.ativaFaltas = 0;
+				break;
+			}
+		}
+	}
+}
+
+void removePaginas(tipoQuadro *q, unsigned int idRecebido){
+	int i;
+	for(i = 0;i < TAMQUADROS;i++){
+		if(q->p[i].id == idRecebido){
+			q->p[i].id = 0;
+			q->p[i].nPagina = 0;
+		}
 	}
 }
 
@@ -410,15 +483,6 @@ void calculaEstatisticas(tipoLista **l, unsigned int t){
     }
 }
 
-void removePaginas(tipoQuadro *q, unsigned int idRecebido){
-	int i;
-	for(i = 0;i < TAMQUADROS;i++){
-		if(q->p[i].id == idRecebido){
-			q->p[i].id = 0;
-			q->p[i].nPagina = 0;
-		}
-	}
-}
 
 void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
     tipoNoh *pAtual;
@@ -492,14 +556,14 @@ int main(){
                     break;
                 }
             }
-			//Se um processo atingiu seu tempo m·ximo de execuÁ„o, È jogado para o final da fila
+			//Se um processo atingiu seu tempo m√°ximo de execu√ß√£o, √© jogado para o final da fila
 			if(listaProcessos->atingiuQuantumMaximo == 1){
                 enviaElementoParaFinalDaLista(&listaProcessos);
                 listaProcessos->atingiuQuantumMaximo = 0;
             }
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
-			//Traz processos que estavam suspensos para a lista de processos prontos caso n„o existem mais processos para serem criados
+			//Traz processos que estavam suspensos para a lista de processos prontos caso n√£o existem mais processos para serem criados
 			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA){
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
@@ -532,15 +596,15 @@ int main(){
         fprintf(file2, "_______________________________\n");
         fprintf(file2, "Round and Robin\n");
         fprintf(file2, "Alpha: %d\n", ALPHA);
-        fprintf(file2, "N˙mero de Processos: %d\n", estatisticas.nProcessos);
-        fprintf(file2, "Tempo de retorno mÈdio: %f\n", estatisticas.retornoMedio);
-        fprintf(file2, "Tempo de serviÁo mÈdio: %f\n", estatisticas.servicoMedio);
-        fprintf(file2, "UtilizaÁ„o do processador: %f\n", estatisticas.usoProcessador);
-        fprintf(file2, "Tempo de resposta mÈdio: %f\n", estatisticas.respostaMedia);
+        fprintf(file2, "N√∫mero de Processos: %d\n", estatisticas.nProcessos);
+        fprintf(file2, "Tempo de retorno m√©dio: %f\n", estatisticas.retornoMedio);
+        fprintf(file2, "Tempo de servi√ßo m√©dio: %f\n", estatisticas.servicoMedio);
+        fprintf(file2, "Utiliza√ß√£o do processador: %f\n", estatisticas.usoProcessador);
+        fprintf(file2, "Tempo de resposta m√©dio: %f\n", estatisticas.respostaMedia);
         fprintf(file2, "Throughput: %f\n", estatisticas.throughput);
-        fprintf(file2, "Tempo de espera mÈdio: %f\n", estatisticas.esperaMedia);
-        fprintf(file2, "DuraÁ„o da simulaÁ„o: %d\n", estatisticas.duracaoDaSimulacao);
-		fprintf(file2, "N˙mero de faltas: %d\n", quadros.nFaltas);
+        fprintf(file2, "Tempo de espera m√©dio: %f\n", estatisticas.esperaMedia);
+        fprintf(file2, "Dura√ß√£o da simula√ß√£o: %d\n", estatisticas.duracaoDaSimulacao);
+		fprintf(file2, "N√∫mero de faltas: %d\n", quadros.nFaltas);
     }
     fclose(file);
     fclose(file2);
