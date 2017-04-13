@@ -369,7 +369,7 @@ void executaProcesso(tipoLista **l, tipoQuadro *q){
     if((*l)->cabeca != NULL){
 		pgAtual = (*l)->cabeca->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
+			if(pgAtual->tempo == (*l)->cabeca->processo.tempoExecutando){
 				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;
@@ -399,7 +399,7 @@ void calculaEstatisticas(tipoLista **l, unsigned int t){
     }
 }
 
-void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
+void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q, unsigned int memoriaUsada){
     tipoNoh *pAtual;
     pAtual = (*l)->cabeca;
     while(pAtual != NULL){
@@ -418,11 +418,11 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
                 (*l)->contador = 0;
             }
             if(pAtual->processo.tempoBloqueado != pAtual->processo.blockTime){
-				if(tamanhoLote == 0){
-					pAtual->processo.status = BLOQUEADO;
+				if(tamanhoLote > 0 && memoriaUsada == ALPHA){
+                    pAtual->processo.status = SUSPENSO;
 				}
 				else{
-					pAtual->processo.status = SUSPENSO;
+					pAtual->processo.status = BLOQUEADO;
 				}
 				removePaginas(q, pgAtual->processo->id);
                 (*l)->contador = 0;
@@ -475,6 +475,7 @@ int main(){
     }
     else{
         carregaLote(file, &lote);
+        carregaListaDePaginas(file3, &lote);
         while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos != 0){
             //printf("t = %d\n", t);
 			//cria novos processos
@@ -499,9 +500,9 @@ int main(){
             calculaEstatisticas(&listaProcessos, t);
             calculaEstatisticas(&listaBloqueados, t);
 			calculaEstatisticas(&listaSuspensos, t);
-            mudaEstado(&listaProcessos, lote->nElementos, &quadros);
-            mudaEstado(&listaBloqueados, lote->nElementos, &quadros);
-			mudaEstado(&listaSuspensos, lote->nElementos, &quadros);
+            mudaEstado(&listaProcessos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
+            mudaEstado(&listaBloqueados, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
+			mudaEstado(&listaSuspensos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
 			//Remove processos que foram terminados
             removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);
 			//Coleta processos suspensos ou bloqueados e os envia para suas respectivas listas

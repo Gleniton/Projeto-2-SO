@@ -213,6 +213,7 @@ void carregaLote(FILE* file, tipoLista **l){
 void carregaListaDePaginas(FILE* file3, tipoLista **l){
 	tipoNoh *pAtual;
 	pAtual = (*l)->cabeca;
+	long posicaoAtual = 0;
 	tipoListaPaginas *lp;
 	tipoListaPaginas *pgAtual;
 	char aux;
@@ -225,7 +226,12 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%u:%u, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
+			fscanf(file3, "%u:%u,", &(lp->tempo), &(lp->pagina.nPagina));
+			posicaoAtual = ftell(file3);
+			fscanf(file3, "%c", &aux);
+			if(aux != '\n' || aux != '\0'){
+                fseek(file3,posicaoAtual,SEEK_SET);
+			}
 			if(pAtual->processo.cabecaPg == NULL){
 				pAtual->processo.cabecaPg = lp;
 			}
@@ -453,12 +459,10 @@ void imprimeLista(tipoLista **l){
 
 void executaProcesso(tipoLista **l, tipoQuadro *q){
 	tipoListaPaginas *pgAtual;
-	tipoNoh *pAtual;
-	pAtual = (*l)->cabeca;
     if((*l)->cabeca != NULL){
 		pgAtual = (*l)->cabeca->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
+			if(pgAtual->tempo == (*l)->cabeca->processo.tempoExecutando){
 				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;
@@ -565,49 +569,36 @@ int main(){
     }
     else{
         carregaLote(file, &lote);
+        carregaListaDePaginas(file3, &lote);
         while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos != 0){
-            //printf("t = %d\n", t);
-            printf("1\n");
+            printf("t = %d\n", t);
 			//cria novos processos
             while(((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA) && lote->nElementos != 0){
                 if(!(criaProcessos(&lote, &listaProcessos, t))){
                     break;
                 }
             }
-            printf("2\n");
 			//Se um processo atingiu seu tempo máximo de execução, é jogado para o final da fila
 			if(listaProcessos->atingiuQuantumMaximo == 1){
                 enviaElementoParaFinalDaLista(&listaProcessos);
                 listaProcessos->atingiuQuantumMaximo = 0;
             }
-            printf("3\n");
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
 			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
-			printf("4\n");
 			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA && temChave(&listaSuspensos, PRONTO)){
-                printf("azul\n");
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
-            printf("5\n");
             executaProcesso(&listaProcessos, &quadros);
-            printf("6\n");
             calculaEstatisticas(&listaProcessos, t);
-            printf("7\n");
             calculaEstatisticas(&listaBloqueados, t);
-            printf("8\n");
 			calculaEstatisticas(&listaSuspensos, t);
-			printf("9\n");
             mudaEstado(&listaProcessos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
-            printf("10\n");
             mudaEstado(&listaBloqueados, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
-            printf("11\n");
 			mudaEstado(&listaSuspensos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
-			printf("12\n");
 			//Remove processos que foram terminados
             removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);
-            printf("1\n");
 			//Coleta processos suspensos ou bloqueados e os envia para suas respectivas listas
 			if(lote->nElementos == 0){
 				enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaBloqueados, BLOQUEADO);
