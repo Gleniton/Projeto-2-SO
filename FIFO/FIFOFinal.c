@@ -226,11 +226,11 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%u:%u,", &(lp->tempo), &(lp->pagina.nPagina));
+			fscanf(file3, "%u:%u, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
 			posicaoAtual = ftell(file3);
-			fscanf(file3, "%c", &aux);
-			if(aux != '\n' || aux != '\0'){
-                fseek(file3,posicaoAtual,SEEK_SET);
+			fscanf(file3, "%c", &aux); //bate com a virgula se pulou uma pagina
+			if(aux == ','){
+                fseek(file3,posicaoAtual-1,SEEK_SET);
 			}
 			if(pAtual->processo.cabecaPg == NULL){
 				pAtual->processo.cabecaPg = lp;
