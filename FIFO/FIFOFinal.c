@@ -92,9 +92,11 @@ void inicializaQuadros(tipoQuadro *q){
 	q->temQuadroLivre = 0;
 	q->nFaltas = 0;
 	q->ativaFaltas = 0;
+	q->proximaInsercao = 1;
 	for(i = 0;i < TAMQUADROS;i++){
 		q->p[i].id = 0;
 		q->p[i].nPagina = 0;
+		q->p[i].ordemInsercao = 0;
 	}
 }
 
@@ -155,6 +157,7 @@ void removePaginas(tipoQuadro *q, unsigned int idRecebido){
 		if(q->p[i].id == idRecebido){
 			q->p[i].id = 0;
 			q->p[i].nPagina = 0;
+			q->p[i].ordemInsercao = 0;
 		}
 	}
 }
@@ -524,7 +527,19 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
     }
 }
 
-
+unsigned int temChave(tipoLista **l, unsigned int chave){
+    unsigned int achou = 0;
+    tipoNoh *pAtual;
+    pAtual = (*l)->cabeca;
+    while(pAtual != NULL){
+        if(pAtual->processo.status == chave){
+            achou = 1;
+            break;
+        }
+        pAtual = pAtual->proximo;
+    }
+    return achou;
+}
 
 int main(){
     unsigned int t = 0;
@@ -552,33 +567,47 @@ int main(){
         carregaLote(file, &lote);
         while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos != 0){
             //printf("t = %d\n", t);
+            printf("1\n");
 			//cria novos processos
             while(((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA) && lote->nElementos != 0){
                 if(!(criaProcessos(&lote, &listaProcessos, t))){
                     break;
                 }
             }
+            printf("2\n");
 			//Se um processo atingiu seu tempo máximo de execução, é jogado para o final da fila
 			if(listaProcessos->atingiuQuantumMaximo == 1){
                 enviaElementoParaFinalDaLista(&listaProcessos);
                 listaProcessos->atingiuQuantumMaximo = 0;
             }
+            printf("3\n");
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
 			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
-			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA){
+			printf("4\n");
+			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA && temChave(&listaSuspensos, PRONTO)){
+                printf("azul\n");
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
+            printf("5\n");
             executaProcesso(&listaProcessos, &quadros);
+            printf("6\n");
             calculaEstatisticas(&listaProcessos, t);
+            printf("7\n");
             calculaEstatisticas(&listaBloqueados, t);
+            printf("8\n");
 			calculaEstatisticas(&listaSuspensos, t);
+			printf("9\n");
             mudaEstado(&listaProcessos, lote->nElementos, &quadros);
+            printf("10\n");
             mudaEstado(&listaBloqueados, lote->nElementos, &quadros);
+            printf("11\n");
 			mudaEstado(&listaSuspensos, lote->nElementos, &quadros);
+			printf("12\n");
 			//Remove processos que foram terminados
             removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);
+            printf("1\n");
 			//Coleta processos suspensos ou bloqueados e os envia para suas respectivas listas
 			if(lote->nElementos == 0){
 				enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaBloqueados, BLOQUEADO);

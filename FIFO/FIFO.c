@@ -12,6 +12,30 @@ struct quadro{
 	unsigned int proximaInsercao; //começar com 1
 };typedef struct quadro tipoQuadro;
 
+void inicializaQuadros(tipoQuadro *q){
+	int i;
+	q->temQuadroLivre = 0;
+	q->nFaltas = 0;
+	q->ativaFaltas = 0;
+	q->proximaInsercao = 1;
+	for(i = 0;i < TAMQUADROS;i++){
+		q->p[i].id = 0;
+		q->p[i].nPagina = 0;
+		q->p[i].ordemInsercao = 0;
+	}
+}
+
+void removePaginas(tipoQuadro *q, unsigned int idRecebido){
+	int i;
+	for(i = 0;i < TAMQUADROS;i++){
+		if(q->p[i].id == idRecebido){
+			q->p[i].id = 0;
+			q->p[i].nPagina = 0;
+			q->p[i].ordemInsercao = 0;
+		}
+	}
+}
+
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
 	//miss = 0
 	//hit = 1

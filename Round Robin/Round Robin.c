@@ -75,17 +75,6 @@ struct stats{
     unsigned int duracaoDaSimulacao;
 };typedef struct stats tipoStats;
 
-void inicializaQuadros(tipoQuadro *q){
-	int i;
-	q->temQuadroLivre = 0;
-	q->nFaltas = 0;
-	q->ativaFaltas = 0;
-	for(i = 0;i < TAMQUADROS;i++){
-		q->p[i].id = 0;
-		q->p[i].nPagina = 0;
-	}
-}
-
 tipoLista* inicializaLista(unsigned int quantum){
 	tipoLista *novaLista;
 	novaLista = (tipoLista*)malloc(sizeof(tipoLista));
@@ -410,16 +399,6 @@ void calculaEstatisticas(tipoLista **l, unsigned int t){
     }
 }
 
-void removePaginas(tipoQuadro *q, unsigned int idRecebido){
-	int i;
-	for(i = 0;i < TAMQUADROS;i++){
-		if(q->p[i].id == idRecebido){
-			q->p[i].id = 0;
-			q->p[i].nPagina = 0;
-		}
-	}
-}
-
 void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
     tipoNoh *pAtual;
     pAtual = (*l)->cabeca;
@@ -458,7 +437,19 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
     }
 }
 
-
+unsigned int temChave(tipoLista **l, unsigned int chave){
+    unsigned int achou = 0;
+    tipoNoh *pAtual;
+    pAtual = (*l)->cabeca;
+    while(pAtual != NULL){
+        if(pAtual->processo.status == chave){
+            achou = 1;
+            break;
+        }
+        pAtual = pAtual->proximo;
+    }
+    return achou;
+}
 
 int main(){
     unsigned int t = 0;
@@ -500,7 +491,7 @@ int main(){
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
 			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
-			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA){
+			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA && temChave(&listaSuspensos, PRONTO)){
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
             //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
