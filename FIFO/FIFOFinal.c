@@ -219,13 +219,13 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 	unsigned int idCorrigida;
 	while(pAtual != NULL){
 		//lembrar de inicializar todos atributos de lp
-		fscanf(file3, "%d, ", &idCorrigida);
+		fscanf(file3, "%u, ", &idCorrigida);
 		idCorrigida++;
 		do{
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%d:%d, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
+			fscanf(file3, "%u:%u, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
 			if(pAtual->processo.cabecaPg == NULL){
 				pAtual->processo.cabecaPg = lp;
 			}

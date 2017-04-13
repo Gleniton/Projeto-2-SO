@@ -1,402 +1,402 @@
 Id: 20
 TurnAround Time: 2768
-Response Time: 725
+Response Time: 0
 Waiting Time:2480
 Id: 14
 TurnAround Time: 2982
-Response Time: 707
+Response Time: 0
 Waiting Time:2818
 Id: 15
 TurnAround Time: 3633
-Response Time: 967
+Response Time: 0
 Waiting Time:3484
 Id: 16
 TurnAround Time: 4602
-Response Time: 623
+Response Time: 0
 Waiting Time:4379
 Id: 2
 TurnAround Time: 7123
-Response Time: 99
+Response Time: 0
 Waiting Time:6204
 Id: 5
 TurnAround Time: 6462
-Response Time: 912
+Response Time: 0
 Waiting Time:6317
 Id: 6
 TurnAround Time: 8076
-Response Time: 572
+Response Time: 0
 Waiting Time:7639
 Id: 21
 TurnAround Time: 9340
-Response Time: 613
+Response Time: 0
 Waiting Time:8988
 Id: 3
 TurnAround Time: 10009
-Response Time: 474
+Response Time: 0
 Waiting Time:9563
 Id: 70
 TurnAround Time: 10729
-Response Time: 8
+Response Time: 1
 Waiting Time:10588
 Id: 24
 TurnAround Time: 10908
-Response Time: 7
+Response Time: 0
 Waiting Time:9973
 Id: 11
 TurnAround Time: 11098
-Response Time: 234
+Response Time: 0
 Waiting Time:10947
 Id: 25
 TurnAround Time: 11622
-Response Time: 248
+Response Time: 0
 Waiting Time:11368
 Id: 55
 TurnAround Time: 11898
-Response Time: 552
+Response Time: 0
 Waiting Time:11586
 Id: 71
 TurnAround Time: 12088
-Response Time: 919
+Response Time: 0
 Waiting Time:11908
 Id: 31
 TurnAround Time: 12464
-Response Time: 702
+Response Time: 0
 Waiting Time:12257
 Id: 61
 TurnAround Time: 12926
-Response Time: 548
+Response Time: 0
 Waiting Time:12705
 Id: 19
 TurnAround Time: 13432
-Response Time: 125
+Response Time: 0
 Waiting Time:13092
 Id: 92
 TurnAround Time: 13841
-Response Time: 1
+Response Time: 0
 Waiting Time:13692
 Id: 4
 TurnAround Time: 13701
-Response Time: 392
+Response Time: 0
 Waiting Time:13426
 Id: 76
 TurnAround Time: 13881
-Response Time: 567
+Response Time: 1
 Waiting Time:13721
 Id: 34
 TurnAround Time: 14111
-Response Time: 776
+Response Time: 0
 Waiting Time:13328
 Id: 100
 TurnAround Time: 14912
-Response Time: 65
+Response Time: 0
 Waiting Time:14726
 Id: 7
 TurnAround Time: 15991
-Response Time: 68
+Response Time: 0
 Waiting Time:15582
 Id: 97
 TurnAround Time: 16069
-Response Time: 162
+Response Time: 0
 Waiting Time:15613
 Id: 18
 TurnAround Time: 17030
-Response Time: 462
+Response Time: 0
 Waiting Time:16756
 Id: 89
 TurnAround Time: 17874
-Response Time: 512
+Response Time: 0
 Waiting Time:17656
 Id: 58
 TurnAround Time: 18711
-Response Time: 205
+Response Time: 0
 Waiting Time:17953
 Id: 65
 TurnAround Time: 18805
-Response Time: 442
+Response Time: 0
 Waiting Time:18247
 Id: 86
 TurnAround Time: 18398
-Response Time: 890
+Response Time: 0
 Waiting Time:17596
 Id: 37
 TurnAround Time: 18793
-Response Time: 984
+Response Time: 0
 Waiting Time:17786
 Id: 78
 TurnAround Time: 19722
-Response Time: 182
+Response Time: 0
 Waiting Time:19332
 Id: 81
 TurnAround Time: 20121
-Response Time: 19
+Response Time: 0
 Waiting Time:19862
 Id: 57
 TurnAround Time: 19680
-Response Time: 589
+Response Time: 0
 Waiting Time:19054
 Id: 35
 TurnAround Time: 19631
-Response Time: 657
+Response Time: 0
 Waiting Time:18714
 Id: 95
 TurnAround Time: 20211
-Response Time: 387
+Response Time: 0
 Waiting Time:19837
 Id: 44
 TurnAround Time: 20123
-Response Time: 933
+Response Time: 0
 Waiting Time:19659
 Id: 60
 TurnAround Time: 20634
-Response Time: 496
+Response Time: 0
 Waiting Time:20203
 Id: 50
 TurnAround Time: 20394
-Response Time: 810
+Response Time: 0
 Waiting Time:19598
 Id: 90
 TurnAround Time: 21219
-Response Time: 95
+Response Time: 0
 Waiting Time:20960
 Id: 96
 TurnAround Time: 21105
-Response Time: 512
+Response Time: 1
 Waiting Time:20115
 Id: 85
 TurnAround Time: 21060
-Response Time: 707
+Response Time: 1
 Waiting Time:20786
 Id: 30
 TurnAround Time: 21483
-Response Time: 486
+Response Time: 0
 Waiting Time:20959
 Id: 77
 TurnAround Time: 21149
-Response Time: 990
+Response Time: 0
 Waiting Time:20533
 Id: 45
 TurnAround Time: 22025
-Response Time: 121
+Response Time: 0
 Waiting Time:21320
 Id: 23
 TurnAround Time: 21920
-Response Time: 246
+Response Time: 0
 Waiting Time:21255
 Id: 1
 TurnAround Time: 21765
-Response Time: 540
+Response Time: 0
 Waiting Time:21476
 Id: 56
 TurnAround Time: 21696
-Response Time: 705
+Response Time: 0
 Waiting Time:20906
 Id: 28
 TurnAround Time: 22169
-Response Time: 446
+Response Time: 0
 Waiting Time:21269
 Id: 72
 TurnAround Time: 22532
-Response Time: 728
+Response Time: 0
 Waiting Time:22192
 Id: 32
 TurnAround Time: 23058
-Response Time: 357
+Response Time: 0
 Waiting Time:22757
 Id: 75
 TurnAround Time: 22779
-Response Time: 779
+Response Time: 0
 Waiting Time:22143
 Id: 83
 TurnAround Time: 23318
-Response Time: 393
+Response Time: 0
 Waiting Time:22615
 Id: 17
 TurnAround Time: 23458
-Response Time: 551
+Response Time: 0
 Waiting Time:22445
 Id: 51
 TurnAround Time: 23749
-Response Time: 640
+Response Time: 0
 Waiting Time:23181
 Id: 91
 TurnAround Time: 23893
-Response Time: 677
+Response Time: 0
 Waiting Time:23443
 Id: 63
 TurnAround Time: 24912
-Response Time: 233
+Response Time: 0
 Waiting Time:24319
 Id: 38
 TurnAround Time: 24731
-Response Time: 435
+Response Time: 0
 Waiting Time:24295
 Id: 66
 TurnAround Time: 25270
-Response Time: 308
+Response Time: 0
 Waiting Time:24540
 Id: 26
 TurnAround Time: 25027
-Response Time: 825
+Response Time: 0
 Waiting Time:24399
 Id: 74
 TurnAround Time: 25137
-Response Time: 866
+Response Time: 0
 Waiting Time:24557
 Id: 52
 TurnAround Time: 25921
-Response Time: 124
+Response Time: 0
 Waiting Time:25567
 Id: 42
 TurnAround Time: 25549
-Response Time: 567
+Response Time: 0
 Waiting Time:24757
 Id: 54
 TurnAround Time: 25925
-Response Time: 285
+Response Time: 0
 Waiting Time:25437
 Id: 43
 TurnAround Time: 26338
-Response Time: 67
+Response Time: 0
 Waiting Time:25466
 Id: 22
 TurnAround Time: 26204
-Response Time: 295
+Response Time: 0
 Waiting Time:25828
 Id: 99
 TurnAround Time: 26328
-Response Time: 236
+Response Time: 0
 Waiting Time:25822
 Id: 36
 TurnAround Time: 26598
-Response Time: 367
+Response Time: 0
 Waiting Time:26226
 Id: 53
 TurnAround Time: 27047
-Response Time: 89
+Response Time: 0
 Waiting Time:26483
 Id: 80
 TurnAround Time: 26487
-Response Time: 692
+Response Time: 0
 Waiting Time:26066
 Id: 68
 TurnAround Time: 26920
-Response Time: 357
+Response Time: 1
 Waiting Time:26424
 Id: 41
 TurnAround Time: 27805
-Response Time: 32
+Response Time: 0
 Waiting Time:26810
 Id: 69
 TurnAround Time: 27278
-Response Time: 775
+Response Time: 0
 Waiting Time:26694
 Id: 67
 TurnAround Time: 27730
-Response Time: 408
+Response Time: 0
 Waiting Time:27244
 Id: 84
 TurnAround Time: 27298
-Response Time: 897
+Response Time: 0
 Waiting Time:26691
 Id: 40
 TurnAround Time: 28905
-Response Time: 542
+Response Time: 0
 Waiting Time:28213
 Id: 82
 TurnAround Time: 29363
-Response Time: 213
+Response Time: 0
 Waiting Time:28467
 Id: 46
 TurnAround Time: 28786
-Response Time: 825
+Response Time: 1
 Waiting Time:27990
 Id: 13
 TurnAround Time: 29665
-Response Time: 35
+Response Time: 0
 Waiting Time:28989
 Id: 39
 TurnAround Time: 28907
-Response Time: 858
+Response Time: 0
 Waiting Time:28184
 Id: 29
 TurnAround Time: 30035
-Response Time: 27
+Response Time: 0
 Waiting Time:29272
 Id: 93
 TurnAround Time: 30241
-Response Time: 292
+Response Time: 0
 Waiting Time:29527
 Id: 87
 TurnAround Time: 30225
-Response Time: 456
+Response Time: 0
 Waiting Time:29655
 Id: 8
 TurnAround Time: 30051
-Response Time: 635
+Response Time: 0
 Waiting Time:29236
 Id: 10
 TurnAround Time: 30724
-Response Time: 3
+Response Time: 0
 Waiting Time:29885
 Id: 98
 TurnAround Time: 30527
-Response Time: 214
+Response Time: 1
 Waiting Time:29688
 Id: 48
 TurnAround Time: 30481
-Response Time: 694
+Response Time: 0
 Waiting Time:29688
 Id: 27
 TurnAround Time: 30403
-Response Time: 774
+Response Time: 0
 Waiting Time:29825
 Id: 73
 TurnAround Time: 30450
-Response Time: 864
+Response Time: 0
 Waiting Time:29665
 Id: 47
 TurnAround Time: 31222
-Response Time: 399
+Response Time: 0
 Waiting Time:30620
 Id: 62
 TurnAround Time: 31602
-Response Time: 172
+Response Time: 0
 Waiting Time:30950
 Id: 49
 TurnAround Time: 31690
-Response Time: 214
+Response Time: 0
 Waiting Time:30947
 Id: 88
 TurnAround Time: 32200
-Response Time: 234
+Response Time: 1
 Waiting Time:31481
 Id: 79
 TurnAround Time: 31919
-Response Time: 629
+Response Time: 0
 Waiting Time:31101
 Id: 94
 TurnAround Time: 31765
-Response Time: 856
+Response Time: 0
 Waiting Time:30790
 Id: 59
 TurnAround Time: 32012
-Response Time: 690
+Response Time: 0
 Waiting Time:31027
 Id: 64
 TurnAround Time: 31776
-Response Time: 963
+Response Time: 0
 Waiting Time:30975
 Id: 12
 TurnAround Time: 32851
-Response Time: 178
+Response Time: 0
 Waiting Time:31965
 Id: 9
 TurnAround Time: 33202
-Response Time: 103
+Response Time: 0
 Waiting Time:32195
 Id: 33
 TurnAround Time: 33340
-Response Time: 8
+Response Time: 0
 Waiting Time:32310
 _______________________________
 Round and Robin
@@ -405,7 +405,7 @@ Número de Processos: 100
 Tempo de retorno médio: 21840.179688
 Tempo de serviço médio: 324.579987
 Utilização do processador: 0.973283
-Tempo de resposta médio: 463.429993
+Tempo de resposta médio: 0.080000
 Throughput: 0.002999
 Tempo de espera médio: 21272.619141
 Duração da simulação: 33349
