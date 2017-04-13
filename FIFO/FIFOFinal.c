@@ -489,7 +489,7 @@ void calculaEstatisticas(tipoLista **l, unsigned int t){
 }
 
 
-void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
+void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q, unsigned int memoriaUsada){
     tipoNoh *pAtual;
     pAtual = (*l)->cabeca;
     while(pAtual != NULL){
@@ -508,11 +508,11 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q){
                 (*l)->contador = 0;
             }
             if(pAtual->processo.tempoBloqueado != pAtual->processo.blockTime){
-				if(tamanhoLote == 0){
-					pAtual->processo.status = BLOQUEADO;
+				if(tamanhoLote > 0 && memoriaUsada == ALPHA){
+					pAtual->processo.status = SUSPENSO;
 				}
 				else{
-					pAtual->processo.status = SUSPENSO;
+					pAtual->processo.status = BLOQUEADO;
 				}
 				removePaginas(q, pAtual->processo.id);
                 (*l)->contador = 0;
@@ -599,11 +599,11 @@ int main(){
             printf("8\n");
 			calculaEstatisticas(&listaSuspensos, t);
 			printf("9\n");
-            mudaEstado(&listaProcessos, lote->nElementos, &quadros);
+            mudaEstado(&listaProcessos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
             printf("10\n");
-            mudaEstado(&listaBloqueados, lote->nElementos, &quadros);
+            mudaEstado(&listaBloqueados, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
             printf("11\n");
-			mudaEstado(&listaSuspensos, lote->nElementos, &quadros);
+			mudaEstado(&listaSuspensos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
 			printf("12\n");
 			//Remove processos que foram terminados
             removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);

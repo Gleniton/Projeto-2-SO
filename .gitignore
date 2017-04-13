@@ -52,3 +52,4 @@ referencias1.txt
 *.exe
 *.o
 *.cbp
+*.depend
