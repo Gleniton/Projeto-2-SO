@@ -217,20 +217,22 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 	tipoListaPaginas *lp;
 	tipoListaPaginas *pgAtual;
 	char aux;
+	char aux2;
 	unsigned int idCorrigida;
 	while(pAtual != NULL){
 		//lembrar de inicializar todos atributos de lp
-		fscanf(file3, "%u, ", &idCorrigida);
+		fscanf(file3, "%u,", &idCorrigida);
 		idCorrigida++;
 		do{
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%u:%u, %c", &(lp->tempo), &(lp->pagina.nPagina), &aux);
+			fscanf(file3, "%u:%u,", &(lp->tempo), &(lp->pagina.nPagina));
 			posicaoAtual = ftell(file3);
-			fscanf(file3, "%c", &aux); //bate com a virgula se pulou uma pagina
-			if(aux == ','){
-                fseek(file3,posicaoAtual-1,SEEK_SET);
+			fscanf(file3, "%c", &aux);
+			fscanf(file3, "%c", &aux2);
+			if(aux2 != '\n'){
+                fseek(file3, posicaoAtual, SEEK_SET);
 			}
 			if(pAtual->processo.cabecaPg == NULL){
 				pAtual->processo.cabecaPg = lp;
@@ -242,7 +244,7 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 				}
 				pgAtual->proximo = lp;
 			}
-		}while(aux != '\n');
+		}while(aux2 != '\n');
 		pAtual = pAtual->proximo;
 	}
 }
@@ -563,7 +565,7 @@ int main(){
 	listaSuspensos = inicializaLista(0);
     file = fopen("cenario1.txt","r");
     file2 = fopen("saidaCenario1.1.txt","w");
-	file3 = fopen("referencias1.txt", "r");
+	file3 = fopen("referencias1.txt", "rb");
     if(file == NULL || file2 == NULL){
         printf("Erro ao abrir arquivos.\n");
     }
