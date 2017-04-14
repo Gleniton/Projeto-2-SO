@@ -70,6 +70,7 @@ struct noh{
 struct lista{
 	tipoNoh *cabeca;
 	tipoNoh *cauda;
+	char nome;
 	unsigned int nElementos;
 	unsigned int quantum;
 	unsigned int contador;
@@ -87,6 +88,34 @@ struct stats{
     unsigned int duracaoDaSimulacao;
 };typedef struct stats tipoStats;
 
+unsigned int temChave(tipoLista **l, unsigned int chave){
+    unsigned int achou = 0;
+    tipoNoh *pAtual;
+    pAtual = (*l)->cabeca;
+    while(pAtual != NULL){
+        if(pAtual->processo.status == chave){
+            achou = 1;
+            break;
+        }
+        pAtual = pAtual->proximo;
+    }
+    return achou;
+}
+
+unsigned int temProcessoNovo(tipoLista **l, unsigned int t){
+    unsigned int sucesso = 0;
+    tipoNoh *pAtual;
+    pAtual = (*l)->cabeca;
+    while(pAtual != NULL){
+        if(pAtual->processo.submissionTime <= t){
+            sucesso = 1;
+            break;
+        }
+        pAtual = pAtual->proximo;
+    }
+    return sucesso;
+}
+
 void inicializaQuadros(tipoQuadro *q){
 	int i;
 	q->temQuadroLivre = 0;
@@ -101,6 +130,7 @@ void inicializaQuadros(tipoQuadro *q){
 }
 
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
+	printf("\tgerenciaPaginas\n");
 	//miss = 0
 	//hit = 1
 	unsigned int hit = 0;
@@ -152,6 +182,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 }
 
 void removePaginas(tipoQuadro *q, unsigned int idRecebido){
+	printf("\tremovePaginas\n");
 	int i;
 	for(i = 0;i < TAMQUADROS;i++){
 		if(q->p[i].id == idRecebido){
@@ -162,10 +193,11 @@ void removePaginas(tipoQuadro *q, unsigned int idRecebido){
 	}
 }
 
-tipoLista* inicializaLista(unsigned int quantum){
+tipoLista* inicializaLista(unsigned int quantum, char nomeRecebido){
 	tipoLista *novaLista;
 	novaLista = (tipoLista*)malloc(sizeof(tipoLista));
 	novaLista->nElementos = 0;
+	novaLista->nome = nomeRecebido;
 	novaLista->quantum = quantum;
 	novaLista->atingiuQuantumMaximo = 0;
 	novaLista->contador = 0;
@@ -211,6 +243,7 @@ void carregaLote(FILE* file, tipoLista **l){
 }
 
 void carregaListaDePaginas(FILE* file3, tipoLista **l){
+	printf("carregaListaDePaginas\n");
 	tipoNoh *pAtual;
 	pAtual = (*l)->cabeca;
 	long posicaoAtual = 0;
@@ -460,20 +493,24 @@ void imprimeLista(tipoLista **l){
 }
 
 void executaProcesso(tipoLista **l, tipoQuadro *q){
+    printf("\texecutaProcesso\n");
 	tipoListaPaginas *pgAtual;
-    if((*l)->cabeca != NULL){
-		pgAtual = (*l)->cabeca->processo.cabecaPg;
+	tipoNoh *pAtual;
+	pAtual = (*l)->cabeca;
+    if(pAtual != NULL){
+		pgAtual = pAtual->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == (*l)->cabeca->processo.tempoExecutando){
+			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
 				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;
 		}
-        (*l)->cabeca->processo.status = EXECUTANDO;
+        pAtual->processo.status = EXECUTANDO;
     }
 }
 
 void calculaEstatisticas(tipoLista **l, unsigned int t){
+    printf("\tcalculaEstatisticas\n");
     tipoNoh *pAtual;
     pAtual = (*l)->cabeca;
     while(pAtual != NULL){
@@ -494,8 +531,8 @@ void calculaEstatisticas(tipoLista **l, unsigned int t){
     }
 }
 
-
-void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q, unsigned int memoriaUsada){
+void mudaEstado(tipoLista **l, tipoLista **lote, tipoQuadro *q, unsigned int memoriaUsada, unsigned int t){
+    printf("\tmudaEstado\n");
     tipoNoh *pAtual;
     pAtual = (*l)->cabeca;
     while(pAtual != NULL){
@@ -514,13 +551,13 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q, unsigned
                 (*l)->contador = 0;
             }
             if(pAtual->processo.tempoBloqueado != pAtual->processo.blockTime){
-				if(tamanhoLote > 0 && memoriaUsada == ALPHA){
-					pAtual->processo.status = SUSPENSO;
-				}
-				else{
-					pAtual->processo.status = BLOQUEADO;
-				}
-				removePaginas(q, pAtual->processo.id);
+                if(temProcessoNovo(lote, t+1) && memoriaUsada == ALPHA){
+                    pAtual->processo.status = SUSPENSO;
+                    removePaginas(q, pAtual->processo.id);
+                }
+                else{
+                    pAtual->processo.status = BLOQUEADO;
+                }
                 (*l)->contador = 0;
             }
             if((*l)->contador == (*l)->quantum){
@@ -531,20 +568,6 @@ void mudaEstado(tipoLista **l, unsigned int tamanhoLote, tipoQuadro *q, unsigned
         }
         pAtual = pAtual->proximo;
     }
-}
-
-unsigned int temChave(tipoLista **l, unsigned int chave){
-    unsigned int achou = 0;
-    tipoNoh *pAtual;
-    pAtual = (*l)->cabeca;
-    while(pAtual != NULL){
-        if(pAtual->processo.status == chave){
-            achou = 1;
-            break;
-        }
-        pAtual = pAtual->proximo;
-    }
-    return achou;
 }
 
 int main(){
@@ -559,10 +582,10 @@ int main(){
     tipoLista *listaBloqueados;
 	tipoLista *listaSuspensos;
 	inicializaQuadros(&quadros);
-    lote = inicializaLista(0);
-    listaProcessos = inicializaLista(2);
-    listaBloqueados = inicializaLista(0);
-	listaSuspensos = inicializaLista(0);
+    lote = inicializaLista(0, 'L');
+    listaProcessos = inicializaLista(2, 'P');
+    listaBloqueados = inicializaLista(0, 'B');
+	listaSuspensos = inicializaLista(0, 'S');
     file = fopen("cenario1.txt","r");
     file2 = fopen("saidaCenario1.1.txt","w");
 	file3 = fopen("referencias1.txt", "rb");
@@ -572,7 +595,8 @@ int main(){
     else{
         carregaLote(file, &lote);
         carregaListaDePaginas(file3, &lote);
-        while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos != 0){
+        while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos + listaSuspensos->nElementos != 0){
+            //system("pause");
             printf("t = %d\n", t);
 			//cria novos processos
             while(((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA) && lote->nElementos != 0){
@@ -588,25 +612,29 @@ int main(){
 			//Traz processos que estavam bloqueados para a lista de processos prontos
             enviaTodosChaveL1ParaL2(&listaBloqueados, &listaProcessos, PRONTO);
 			//Traz processos que estavam suspensos para a lista de processos prontos caso não existem mais processos para serem criados
-			while(lote->nElementos == 0 && (listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA && temChave(&listaSuspensos, PRONTO)){
+			while((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA && temChave(&listaSuspensos, PRONTO)){
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
-            //printf("t(%d) %d %d %d\n", t, lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos);
+            printf("\tTamanho:\n\t\tLote:%d\n\t\tProcessos:%d\n\t\tBloqueados:%d\n\t\tSuspensos:%d\n", lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos, listaSuspensos->nElementos);
             executaProcesso(&listaProcessos, &quadros);
             calculaEstatisticas(&listaProcessos, t);
             calculaEstatisticas(&listaBloqueados, t);
 			calculaEstatisticas(&listaSuspensos, t);
-            mudaEstado(&listaProcessos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
-            mudaEstado(&listaBloqueados, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
-			mudaEstado(&listaSuspensos, lote->nElementos, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos));
+            mudaEstado(&listaProcessos, &lote, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos), t);
+            mudaEstado(&listaBloqueados, &lote, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos), t);
+			mudaEstado(&listaSuspensos, &lote, &quadros, (listaProcessos->nElementos + listaBloqueados->nElementos), t);
 			//Remove processos que foram terminados
-            removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);
-			//Coleta processos suspensos ou bloqueados e os envia para suas respectivas listas
-			if(lote->nElementos == 0){
-				enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaBloqueados, BLOQUEADO);
-			}
-			else{
-				enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaSuspensos, SUSPENSO);
+			if(listaProcessos->cabeca != NULL){
+                if(listaProcessos->cabeca->processo.status == TERMINADO){
+                    removeChaveL1(&listaProcessos, file2, t, TERMINADO, &estatisticas);
+                }
+                //Coleta processos suspensos ou bloqueados e os envia para suas respectivas listas
+                else if(listaProcessos->cabeca->processo.status == BLOQUEADO){
+                    enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaBloqueados, BLOQUEADO);
+                }
+                else if(listaProcessos->cabeca->processo.status == SUSPENSO){
+                    enviaPrimeiraChaveL1ParaL2(&listaProcessos, &listaSuspensos, SUSPENSO);
+                }
 			}
         t++;
         }
