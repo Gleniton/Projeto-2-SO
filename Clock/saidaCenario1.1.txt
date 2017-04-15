@@ -1,0 +1,414 @@
+Id: 14
+TurnAround Time: 2893
+Response Time: 104
+Waiting Time:2729
+Id: 20
+TurnAround Time: 2882
+Response Time: 104
+Waiting Time:2594
+Id: 15
+TurnAround Time: 3785
+Response Time: 145
+Waiting Time:3636
+Id: 16
+TurnAround Time: 4452
+Response Time: 87
+Waiting Time:4229
+Id: 70
+TurnAround Time: 5405
+Response Time: 1
+Waiting Time:5264
+Id: 92
+TurnAround Time: 7015
+Response Time: 0
+Waiting Time:6866
+Id: 2
+TurnAround Time: 7178
+Response Time: 8
+Waiting Time:6259
+Id: 5
+TurnAround Time: 6577
+Response Time: 136
+Waiting Time:6432
+Id: 6
+TurnAround Time: 8051
+Response Time: 77
+Waiting Time:7614
+Id: 11
+TurnAround Time: 9226
+Response Time: 17
+Waiting Time:9075
+Id: 21
+TurnAround Time: 9224
+Response Time: 88
+Waiting Time:8872
+Id: 3
+TurnAround Time: 9777
+Response Time: 59
+Waiting Time:9331
+Id: 25
+TurnAround Time: 10345
+Response Time: 25
+Waiting Time:10091
+Id: 24
+TurnAround Time: 10702
+Response Time: 0
+Waiting Time:9767
+Id: 100
+TurnAround Time: 11302
+Response Time: 7
+Waiting Time:11116
+Id: 19
+TurnAround Time: 11903
+Response Time: 12
+Waiting Time:11563
+Id: 55
+TurnAround Time: 11490
+Response Time: 72
+Waiting Time:11178
+Id: 31
+TurnAround Time: 12111
+Response Time: 101
+Waiting Time:11904
+Id: 61
+TurnAround Time: 12319
+Response Time: 70
+Waiting Time:12098
+Id: 71
+TurnAround Time: 12003
+Response Time: 136
+Waiting Time:11823
+Id: 4
+TurnAround Time: 12861
+Response Time: 44
+Waiting Time:12586
+Id: 76
+TurnAround Time: 13175
+Response Time: 75
+Waiting Time:13015
+Id: 7
+TurnAround Time: 14392
+Response Time: 8
+Waiting Time:13983
+Id: 34
+TurnAround Time: 13943
+Response Time: 109
+Waiting Time:13160
+Id: 97
+TurnAround Time: 14989
+Response Time: 14
+Waiting Time:14533
+Id: 81
+TurnAround Time: 16034
+Response Time: 3
+Waiting Time:15775
+Id: 18
+TurnAround Time: 16232
+Response Time: 56
+Waiting Time:15958
+Id: 89
+TurnAround Time: 17020
+Response Time: 60
+Waiting Time:16802
+Id: 90
+TurnAround Time: 18253
+Response Time: 7
+Waiting Time:17994
+Id: 58
+TurnAround Time: 18189
+Response Time: 15
+Waiting Time:17431
+Id: 78
+TurnAround Time: 18349
+Response Time: 17
+Waiting Time:17959
+Id: 65
+TurnAround Time: 18326
+Response Time: 51
+Waiting Time:17768
+Id: 86
+TurnAround Time: 18141
+Response Time: 128
+Waiting Time:17339
+Id: 37
+TurnAround Time: 18522
+Response Time: 143
+Waiting Time:17515
+Id: 95
+TurnAround Time: 19335
+Response Time: 44
+Waiting Time:18961
+Id: 57
+TurnAround Time: 19344
+Response Time: 81
+Waiting Time:18718
+Id: 35
+TurnAround Time: 19311
+Response Time: 91
+Waiting Time:18394
+Id: 60
+TurnAround Time: 19990
+Response Time: 59
+Waiting Time:19559
+Id: 44
+TurnAround Time: 19817
+Response Time: 139
+Waiting Time:19353
+Id: 50
+TurnAround Time: 20058
+Response Time: 107
+Waiting Time:19262
+Id: 85
+TurnAround Time: 20497
+Response Time: 105
+Waiting Time:20223
+Id: 96
+TurnAround Time: 20727
+Response Time: 61
+Waiting Time:19737
+Id: 45
+TurnAround Time: 21227
+Response Time: 10
+Waiting Time:20522
+Id: 30
+TurnAround Time: 20920
+Response Time: 60
+Waiting Time:20396
+Id: 23
+TurnAround Time: 21224
+Response Time: 22
+Waiting Time:20559
+Id: 1
+TurnAround Time: 21005
+Response Time: 66
+Waiting Time:20716
+Id: 77
+TurnAround Time: 20805
+Response Time: 144
+Waiting Time:20189
+Id: 56
+TurnAround Time: 21316
+Response Time: 101
+Waiting Time:20526
+Id: 28
+TurnAround Time: 21763
+Response Time: 52
+Waiting Time:20863
+Id: 32
+TurnAround Time: 21985
+Response Time: 39
+Waiting Time:21684
+Id: 72
+TurnAround Time: 22005
+Response Time: 104
+Waiting Time:21665
+Id: 75
+TurnAround Time: 22401
+Response Time: 111
+Waiting Time:21765
+Id: 83
+TurnAround Time: 22806
+Response Time: 46
+Waiting Time:22103
+Id: 17
+TurnAround Time: 23052
+Response Time: 70
+Waiting Time:22039
+Id: 51
+TurnAround Time: 23315
+Response Time: 93
+Waiting Time:22747
+Id: 91
+TurnAround Time: 23399
+Response Time: 94
+Waiting Time:22949
+Id: 52
+TurnAround Time: 24030
+Response Time: 12
+Waiting Time:23676
+Id: 63
+TurnAround Time: 24078
+Response Time: 17
+Waiting Time:23485
+Id: 38
+TurnAround Time: 23979
+Response Time: 53
+Waiting Time:23543
+Id: 66
+TurnAround Time: 24648
+Response Time: 31
+Waiting Time:23918
+Id: 54
+TurnAround Time: 24991
+Response Time: 23
+Waiting Time:24503
+Id: 22
+TurnAround Time: 25101
+Response Time: 29
+Waiting Time:24725
+Id: 26
+TurnAround Time: 24581
+Response Time: 109
+Waiting Time:23953
+Id: 74
+TurnAround Time: 24701
+Response Time: 127
+Waiting Time:24121
+Id: 99
+TurnAround Time: 25348
+Response Time: 19
+Waiting Time:24842
+Id: 42
+TurnAround Time: 25074
+Response Time: 74
+Waiting Time:24282
+Id: 43
+TurnAround Time: 25601
+Response Time: 8
+Waiting Time:24729
+Id: 53
+TurnAround Time: 25856
+Response Time: 6
+Waiting Time:25292
+Id: 36
+TurnAround Time: 25627
+Response Time: 41
+Waiting Time:25255
+Id: 68
+TurnAround Time: 26063
+Response Time: 40
+Waiting Time:25567
+Id: 80
+TurnAround Time: 25839
+Response Time: 99
+Waiting Time:25418
+Id: 41
+TurnAround Time: 27071
+Response Time: 2
+Waiting Time:26076
+Id: 67
+TurnAround Time: 26894
+Response Time: 45
+Waiting Time:26408
+Id: 69
+TurnAround Time: 26701
+Response Time: 109
+Waiting Time:26117
+Id: 84
+TurnAround Time: 26738
+Response Time: 130
+Waiting Time:26131
+Id: 13
+TurnAround Time: 28515
+Response Time: 4
+Waiting Time:27839
+Id: 40
+TurnAround Time: 28250
+Response Time: 67
+Waiting Time:27558
+Id: 82
+TurnAround Time: 28632
+Response Time: 16
+Waiting Time:27736
+Id: 46
+TurnAround Time: 28191
+Response Time: 110
+Waiting Time:27395
+Id: 29
+TurnAround Time: 29044
+Response Time: 2
+Waiting Time:28281
+Id: 39
+TurnAround Time: 28314
+Response Time: 123
+Waiting Time:27591
+Id: 93
+TurnAround Time: 29423
+Response Time: 25
+Waiting Time:28709
+Id: 10
+TurnAround Time: 29771
+Response Time: 0
+Waiting Time:28932
+Id: 87
+TurnAround Time: 29428
+Response Time: 55
+Waiting Time:28858
+Id: 98
+TurnAround Time: 29722
+Response Time: 17
+Waiting Time:28883
+Id: 8
+TurnAround Time: 29380
+Response Time: 89
+Waiting Time:28565
+Id: 27
+TurnAround Time: 29697
+Response Time: 107
+Waiting Time:29119
+Id: 48
+TurnAround Time: 29801
+Response Time: 100
+Waiting Time:29008
+Id: 73
+TurnAround Time: 29780
+Response Time: 126
+Waiting Time:28995
+Id: 47
+TurnAround Time: 30410
+Response Time: 45
+Waiting Time:29808
+Id: 62
+TurnAround Time: 30658
+Response Time: 15
+Waiting Time:30006
+Id: 49
+TurnAround Time: 30824
+Response Time: 16
+Waiting Time:30081
+Id: 88
+TurnAround Time: 31296
+Response Time: 18
+Waiting Time:30577
+Id: 79
+TurnAround Time: 31147
+Response Time: 86
+Waiting Time:30329
+Id: 94
+TurnAround Time: 31019
+Response Time: 122
+Waiting Time:30044
+Id: 59
+TurnAround Time: 31258
+Response Time: 98
+Waiting Time:30273
+Id: 64
+TurnAround Time: 31024
+Response Time: 144
+Waiting Time:30223
+Id: 12
+TurnAround Time: 32021
+Response Time: 16
+Waiting Time:31135
+Id: 9
+TurnAround Time: 32350
+Response Time: 9
+Waiting Time:31343
+Id: 33
+TurnAround Time: 32456
+Response Time: 0
+Waiting Time:31426
+_______________________________
+Round and Robin
+Alpha: 100
+Número de quadros: 40
+Algoritmo de substituição de página: Clock
+Número de Processos: 100
+Tempo de retorno médio: 20987.000000
+Tempo de serviço médio: 324.579987
+Utilização do processador: 0.999784
+Tempo de resposta médio: 60.619999
+Throughput: 0.003080
+Tempo de espera médio: 20419.439453
+Duração da simulação: 32465
+Número de faltas: 34197

@@ -102,11 +102,16 @@ tipoListaPaginas* criaListaSimulacao(tipoLista **l){
 		processoFuturo.tempoExecutando = pAtual->processo.tempoExecutando;
 		processoFuturo.tempoBloqueado = pAtual->processo.tempoBloqueado;
 		processoFuturo.atingiuQuantumMaximo = 0;
-		processoFuturo.contador = (*l)->contador;
+		if(pAtual == (*l)->cabeca){
+			processoFuturo.contador = (*l)->contador;
+		}
+		else{
+			processoFuturo.contador = 0;
+		}
 		processoFuturo.quantum = (*l)->quantum;
 		pgAtual = pAtual->processo->cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->pagina.tempo == processoFuturo.tempoExecutando){
+			if(pgAtual->pagina.tempo == processoFuturo.tempoExecutando || pgAtual->pagina.nPagina == 0){
 			novaPagina = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			novaPagina->pagina = pgAtual->pagina;
 			novaPagina->proximo = NULL;
@@ -126,10 +131,9 @@ tipoListaPaginas* criaListaSimulacao(tipoLista **l){
 		if(processoFuturo.status == EXECUTANDO){
 			pgAtual = pAtual->processo->cabecaPg;
 			while(pgAtual != NULL){
-				if(pgAtual->pagina.tempo == processoFuturo.tempoExecutando){
+				if(pgAtual->pagina.tempo == processoFuturo.tempoExecutando || pgAtual->pagina.nPagina == 0){
 				novaPagina = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 				novaPagina->pagina = pgAtual->pagina;
-				novaPagina->tempo = pgAtual->tempo;
 				novaPagina->proximo = NULL;
 					if(lp == NULL){
 						lp = novaPagina;
@@ -149,6 +153,7 @@ tipoListaPaginas* criaListaSimulacao(tipoLista **l){
 }
 
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida, unsigned int tempoRecebido ,tipoLista **l){
+	printf("\t\tgerenciaPaginas\n");
 	//miss = 0
 	//hit = 1
 	tipoListaPaginas *lp;
@@ -160,13 +165,13 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	unsigned int i;
 	unsigned int j;
 	unsigned int nQuadroLivre = 0;
-	q.temQuadroLivre = 0;
+	q->temQuadroLivre = 0;
 	for(i = 0;i < TAMQUADROS;i++){
-		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida){
+		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida && q->p[i].tempo == tempoRecebido){
 			hit = 1;
 			break;
 		}
-		if(q->p[i].id == 0 && q->p[i].nPagina == 0 && q->temQuadroLivre == 0){
+		if(q->p[i].id == 0 && q->p[i].nPagina == 0 && q->tempo == 0 && q->temQuadroLivre == 0){
 			q->temQuadroLivre = 1;
 			nQuadroLivre = i;
 		}
@@ -175,6 +180,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		if(q->temQuadroLivre){
 			q->p[nQuadroLivre].id = idRecebida;
 			q->p[nQuadroLivre].nPagina = pagRecebida;
+			q->p[nQuadroLivre].tempo = tempoRecebido;
 			if(q->ativaFaltas) q->nFaltas++;
 		}
 		else{
@@ -183,7 +189,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 				j = 0;
 				pgAtual = lp;
 				while(pgAtual != NULL){
-					if(pgAtual->pagina.id == q->p[i].id && pgAtual->pagina.nPagina == q->p[i].nPagina){
+					if(pgAtual->pagina.id == q->p[i].id && pgAtual->pagina.nPagina == q->p[i].nPagina && pgAtual->pagina.tempo == q->p[i].tempo){
 						if(distanciaExecucao < j){
 							quadroSubstituido = i;
 							distanciaExecucao = j;
@@ -203,6 +209,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 			}
 			q->p[quadroSubstituido].id = idRecebida;
 			q->p[quadroSubstituido].nPagina = pagRecebida;
+			q->p[quadroSubstituido].tempo = tempoRecebido;
 			if(q->ativaFaltas) q->nFaltas++;
 		}
 	}
@@ -210,7 +217,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	if(!q->ativaFaltas){
 		q->ativaFaltas = 1;
 		for(i = 0;i < TAMQUADROS;i++){
-			if(q->p[i].id == 0 && q->p[i].nPagina == 0){
+			if(q->p[i].id == 0 && q->p[i].nPagina == 0 && q->p[i].tempo == 0){
 				q->ativaFaltas = 0;
 				break;
 			}

@@ -402,7 +402,7 @@ _______________________________
 Round and Robin
 Alpha: 100
 Número de quadros: 40
-Algoritmo de substituição de página: FIFO
+Algoritmo de substituição de página: LRU
 Número de Processos: 100
 Tempo de retorno médio: 20987.000000
 Tempo de serviço médio: 324.579987
@@ -411,4 +411,4 @@ Tempo de resposta médio: 60.619999
 Throughput: 0.003080
 Tempo de espera médio: 20419.439453
 Duração da simulação: 32465
-Número de faltas: 34350
+Número de faltas: 82

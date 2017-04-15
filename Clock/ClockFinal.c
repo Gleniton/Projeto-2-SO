@@ -7,7 +7,7 @@
 #define BLOQUEADO 3
 #define TERMINADO 4
 #define SUSPENSO 5
-#define TAMQUADROS 40
+#define TAMQUADROS 30
 #define ALPHA 100
 
 /*
@@ -163,6 +163,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		q->p[q->ponteiro].tempo = tempoRecebido;
 		q->p[q->ponteiro].sinal = 1;
 		q->ponteiro++;
+		if(q->ponteiro == TAMQUADROS) q->ponteiro = 0;
 		if(q->ativaFaltas) q->nFaltas++;
 	}
 	//ativar faltas
@@ -583,7 +584,7 @@ int main(){
     listaBloqueados = inicializaLista(0, 'B');
 	listaSuspensos = inicializaLista(0, 'S');
     file = fopen("cenario1.txt","r");
-    file2 = fopen("saidaCenario1.1.txt","w");
+    file2 = fopen("saidaCenario1.2.txt","w");
 	file3 = fopen("referencias1.txt", "rb");
     if(file == NULL || file2 == NULL){
         printf("Erro ao abrir arquivos.\n");
@@ -593,10 +594,7 @@ int main(){
         carregaListaDePaginas(file3, &lote);
         while(lote->nElementos + listaBloqueados->nElementos + listaProcessos->nElementos + listaSuspensos->nElementos != 0){
             //system("pause");
-            printf("t = %d\n", t);
-            if(t == 254){
-                t = t;
-            }
+            //printf("t = %d\n", t);
 			//cria novos processos
             while(((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA) && lote->nElementos != 0){
                 if(!(criaProcessos(&lote, &listaProcessos, t))){
@@ -614,7 +612,7 @@ int main(){
 			while((listaProcessos->nElementos + listaBloqueados->nElementos) < ALPHA && temChave(&listaSuspensos, PRONTO)){
 				enviaPrimeiraChaveL1ParaL2(&listaSuspensos, &listaProcessos, PRONTO);
 			}
-            printf("\tTamanho:\n\t\tLote:%d\n\t\tProcessos:%d\n\t\tBloqueados:%d\n\t\tSuspensos:%d\n", lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos, listaSuspensos->nElementos);
+            //printf("\tTamanho:\n\t\tLote:%d\n\t\tProcessos:%d\n\t\tBloqueados:%d\n\t\tSuspensos:%d\n", lote->nElementos, listaProcessos->nElementos, listaBloqueados->nElementos, listaSuspensos->nElementos);
             executaProcesso(&listaProcessos, &quadros);
             calculaEstatisticas(&listaProcessos, t);
             calculaEstatisticas(&listaBloqueados, t);
@@ -647,6 +645,8 @@ int main(){
         fprintf(file2, "_______________________________\n");
         fprintf(file2, "Round and Robin\n");
         fprintf(file2, "Alpha: %d\n", ALPHA);
+        fprintf(file2, "Número de quadros: %d\n", TAMQUADROS);
+        fprintf(file2, "Algoritmo de substituição de página: %s\n", "Clock");
         fprintf(file2, "Número de Processos: %d\n", estatisticas.nProcessos);
         fprintf(file2, "Tempo de retorno médio: %f\n", estatisticas.retornoMedio);
         fprintf(file2, "Tempo de serviço médio: %f\n", estatisticas.servicoMedio);
