@@ -104,18 +104,6 @@ unsigned int temProcessoNovo(tipoLista **l, unsigned int t){
     return sucesso;
 }
 
-void removePaginas(tipoQuadro *q, unsigned int idRecebido){
-	printf("\tremovePaginas\n");
-	int i;
-	for(i = 0;i < TAMQUADROS;i++){
-		if(q->p[i].id == idRecebido){
-			q->p[i].id = 0;
-			q->p[i].nPagina = 0;
-			q->p[i].ordemInsercao = 0;
-		}
-	}
-}
-
 tipoLista* inicializaLista(unsigned int quantum, char nomeRecebido){
 	tipoLista *novaLista;
 	novaLista = (tipoLista*)malloc(sizeof(tipoLista));
@@ -423,7 +411,7 @@ void executaProcesso(tipoLista **l, tipoQuadro *q){
     if(pAtual != NULL){
 		pgAtual = pAtual->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
+			if(pgAtual->tempo == pAtual->processo.tempoExecutando || pgAtual->pagina.nPagina == 0){
 				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;

@@ -25,17 +25,6 @@ void inicializaQuadros(tipoQuadro *q){
 	}
 }
 
-void removePaginas(tipoQuadro *q, unsigned int idRecebido){
-	int i;
-	for(i = 0;i < TAMQUADROS;i++){
-		if(q->p[i].id == idRecebido){
-			q->p[i].id = 0;
-			q->p[i].nPagina = 0;
-			q->p[i].sinal = 0;
-		}
-	}
-}
-
 void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
 	//miss = 0
 	//hit = 1
@@ -58,8 +47,8 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		if(q->temQuadroLivre == 1){
 			q->ponteiro = nQuadroLivre;
 		}
-		while(q->p[q.ponteiro].sinal == 1){
-			q->p[q.ponteiro].sinal = 0;
+		while(q->p[q->ponteiro].sinal == 1){
+			q->p[q->ponteiro].sinal = 0;
 			q->ponteiro++;
 			if(q->ponteiro == TAMQUADROS) q->ponteiro = 0;
 		}
@@ -77,6 +66,17 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 				q->ativaFaltas = 0;
 				break;
 			}
+		}
+	}
+}
+
+void removePaginas(tipoQuadro *q, unsigned int idRecebido){
+	int i;
+	for(i = 0;i < TAMQUADROS;i++){
+		if(q->p[i].id == idRecebido){
+			q->p[i].id = 0;
+			q->p[i].nPagina = 0;
+			q->p[i].sinal = 0;
 		}
 	}
 }

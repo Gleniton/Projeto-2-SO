@@ -500,7 +500,7 @@ void executaProcesso(tipoLista **l, tipoQuadro *q){
     if(pAtual != NULL){
 		pgAtual = pAtual->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo.tempoExecutando){
+			if(pgAtual->tempo == pAtual->processo.tempoExecutando || pgAtual->pagina.nPagina == 0){
 				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
 			}
 			pgAtual = pgAtual->proximo;
