@@ -53,3 +53,4 @@ referencias1.txt
 *.o
 *.cbp
 *.depend
+*.layout

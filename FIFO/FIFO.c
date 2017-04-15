@@ -2,6 +2,7 @@ struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
 	unsigned int ordemInsercao; //comecar com 1
+	unsigned int tempo;
 };typedef struct pagina tipoPagina;
 
 struct quadro{
@@ -22,6 +23,7 @@ void inicializaQuadros(tipoQuadro *q){
 		q->p[i].id = 0;
 		q->p[i].nPagina = 0;
 		q->p[i].ordemInsercao = 0;
+		q->p[i].tempo = 0;
 	}
 }
 
@@ -31,12 +33,13 @@ void removePaginas(tipoQuadro *q, unsigned int idRecebido){
 		if(q->p[i].id == idRecebido){
 			q->p[i].id = 0;
 			q->p[i].nPagina = 0;
+			q->p[i].tempo = 0;
 			q->p[i].ordemInsercao = 0;
 		}
 	}
 }
 
-void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
+void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida, unsigned int tempoRecebido){
 	//miss = 0
 	//hit = 1
 	unsigned int hit = 0;
@@ -46,7 +49,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	q.temQuadroLivre = 0;
 	for(i = 0;i < TAMQUADROS;i++){
 		//verifica se deu HIT
-		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida){
+		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida && q->p[i].tempo == tempoRecebido){
 			hit = 1;
 			break;
 		}
@@ -60,6 +63,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		if(q->temQuadroLivre){
 			q->p[nQuadroLivre].id = idRecebida;
 			q->p[nQuadroLivre].nPagina = pagRecebida;
+			q->p[nQuadroLivre].tempo = tempoRecebido;
 			q->p[nQuadroLivre].ordemInsercao = q->proximaInsercao;
 			q->proximaInsercao++;
 		}
@@ -70,6 +74,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 			}
 			q->p[primeiroInserido].id = idRecebida;
 			q->p[primeiroInserido].nPagina = pagRecebida;
+			q->p[primeiroInserido].tempo = tempoRecebido;
 			q->p[primeiroInserido].ordemInsercao = q->proximaInsercao;
 			q->proximaInsercao++;
 		}

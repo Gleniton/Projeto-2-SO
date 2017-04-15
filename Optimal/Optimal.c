@@ -1,6 +1,7 @@
 struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
+	unsigned int tempo;
 };typedef struct pagina tipoPagina;
 
 struct quadro{
@@ -18,6 +19,7 @@ void inicializaQuadros(tipoQuadro *q){
 	for(i = 0;i < TAMQUADROS;i++){
 		q->p[i].id = 0;
 		q->p[i].nPagina = 0;
+		q->p[i].tempo = 0;
 	}
 }
 
@@ -27,6 +29,7 @@ void removePaginas(tipoQuadro *q, unsigned int idRecebido){
 		if(q->p[i].id == idRecebido){
 			q->p[i].id = 0;
 			q->p[i].nPagina = 0;
+			q->p[i].tempo = 0;
 		}
 	}
 }
@@ -44,40 +47,40 @@ struct processoLeve{
 };typedef struct processoLeve tipoProcessoLeve;
 
 void simulaEstatisticasFuturo(tipoProcessoLeve *processoRecebido){
-	if(processoRecebido.status == PRONTO){
-        processoRecebido.waitingTime++;
+	if(processoRecebido->status == PRONTO){
+        processoRecebido->waitingTime++;
     }
-    if(processoRecebido.status == BLOQUEADO){
-        processoRecebido.tempoBloqueado++;
+    if(processoRecebido->status == BLOQUEADO){
+        processoRecebido->tempoBloqueado++;
     }
-    if(processoRecebido.status == EXECUTANDO){
-        processoRecebido.tempoExecutando++;
-        processoRecebido.contador++;
+    if(processoRecebido->status == EXECUTANDO){
+        processoRecebido->tempoExecutando++;
+        processoRecebido->contador++;
     }
 }
 
 void simulaEstadoFuturo(tipoProcessoLeve *processoRecebido){
-    if(processoRecebido.status == PRONTO){
+    if(processoRecebido->status == PRONTO){
 	
     }
-    if(processoRecebido.status == BLOQUEADO){
-        if(processoRecebido.tempoBloqueado == processoRecebido.blockTime){
-            processoRecebido.status = PRONTO;
+    if(processoRecebido->status == BLOQUEADO){
+        if(processoRecebido->tempoBloqueado == processoRecebido->blockTime){
+            processoRecebido->status = PRONTO;
         }
     }
-    if(processoRecebido.status == EXECUTANDO){
-        if(processoRecebido.tempoBloqueado + processoRecebido.tempoExecutando == processoRecebido.executionTime){
-            processoRecebido.status = TERMINADO;
-            processoRecebido.contador = 0;
+    if(processoRecebido->status == EXECUTANDO){
+        if(processoRecebido->tempoBloqueado + processoRecebido->tempoExecutando == processoRecebido->executionTime){
+            processoRecebido->status = TERMINADO;
+            processoRecebido->contador = 0;
         }
-        if(processoRecebido.tempoBloqueado != processoRecebido.blockTime){
-			processoRecebido.status = BLOQUEADO;
-			processoRecebido.contador = 0;
+        if(processoRecebido->tempoBloqueado != processoRecebido->blockTime){
+			processoRecebido->status = BLOQUEADO;
+			processoRecebido->contador = 0;
         }
-        if(processoRecebido.contador == processoRecebido.quantum){
-            processoRecebido.status = PRONTO;
-            processoRecebido.contador = 0;
-            processoRecebido.atingiuQuantumMaximo = 1;
+        if(processoRecebido->contador == processoRecebido->quantum){
+            processoRecebido->status = PRONTO;
+            processoRecebido->contador = 0;
+            processoRecebido->atingiuQuantumMaximo = 1;
         }
     }
 }
@@ -103,10 +106,9 @@ tipoListaPaginas* criaListaSimulacao(tipoLista **l){
 		processoFuturo.quantum = (*l)->quantum;
 		pgAtual = pAtual->processo->cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == processoFuturo.tempoExecutando){
+			if(pgAtual->pagina.tempo == processoFuturo.tempoExecutando){
 			novaPagina = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			novaPagina->pagina = pgAtual->pagina;
-			novaPagina->tempo = pgAtual->tempo;
 			novaPagina->proximo = NULL;
 				if(lp == NULL){
 					lp = novaPagina;
@@ -124,7 +126,7 @@ tipoListaPaginas* criaListaSimulacao(tipoLista **l){
 		if(processoFuturo.status == EXECUTANDO){
 			pgAtual = pAtual->processo->cabecaPg;
 			while(pgAtual != NULL){
-				if(pgAtual->tempo == processoFuturo.tempoExecutando){
+				if(pgAtual->pagina.tempo == processoFuturo.tempoExecutando){
 				novaPagina = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 				novaPagina->pagina = pgAtual->pagina;
 				novaPagina->tempo = pgAtual->tempo;
@@ -146,7 +148,7 @@ tipoListaPaginas* criaListaSimulacao(tipoLista **l){
 	return lp;
 }
 
-void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida, tipoLista **l){
+void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida, unsigned int tempoRecebido ,tipoLista **l){
 	//miss = 0
 	//hit = 1
 	tipoListaPaginas *lp;

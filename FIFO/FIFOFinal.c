@@ -29,6 +29,7 @@ struct pagina{
 	unsigned int id;
 	unsigned int nPagina;
 	unsigned int ordemInsercao; //comecar com 1
+	unsigned int tempo;
 };typedef struct pagina tipoPagina;
 
 struct quadro{
@@ -41,7 +42,6 @@ struct quadro{
 
 struct listaPaginas{
 	tipoPagina pagina;
-	unsigned int tempo;
 	struct listaPaginas *proximo;
 };typedef struct listaPaginas tipoListaPaginas;
 
@@ -126,10 +126,11 @@ void inicializaQuadros(tipoQuadro *q){
 		q->p[i].id = 0;
 		q->p[i].nPagina = 0;
 		q->p[i].ordemInsercao = 0;
+		q->p[i].tempo = 0;
 	}
 }
 
-void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida){
+void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRecebida, unsigned int tempoRecebido){
 	printf("\tgerenciaPaginas\n");
 	//miss = 0
 	//hit = 1
@@ -140,7 +141,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 	q->temQuadroLivre = 0;
 	for(i = 0;i < TAMQUADROS;i++){
 		//verifica se deu HIT
-		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida){
+		if(q->p[i].id == idRecebida && q->p[i].nPagina == pagRecebida && q->p[i].tempo == tempoRecebido){
 			hit = 1;
 			break;
 		}
@@ -154,6 +155,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 		if(q->temQuadroLivre){
 			q->p[nQuadroLivre].id = idRecebida;
 			q->p[nQuadroLivre].nPagina = pagRecebida;
+			q->p[nQuadroLivre].tempo = tempoRecebido;
 			q->p[nQuadroLivre].ordemInsercao = q->proximaInsercao;
 			q->proximaInsercao++;
 		}
@@ -164,6 +166,7 @@ void gerenciaPaginas(tipoQuadro *q, unsigned int idRecebida, unsigned int pagRec
 			}
 			q->p[primeiroInserido].id = idRecebida;
 			q->p[primeiroInserido].nPagina = pagRecebida;
+			q->p[primeiroInserido].tempo = tempoRecebido;
 			q->p[primeiroInserido].ordemInsercao = q->proximaInsercao;
 			q->proximaInsercao++;
 		}
@@ -188,6 +191,7 @@ void removePaginas(tipoQuadro *q, unsigned int idRecebido){
 		if(q->p[i].id == idRecebido){
 			q->p[i].id = 0;
 			q->p[i].nPagina = 0;
+			q->p[i].tempo = 0;
 			q->p[i].ordemInsercao = 0;
 		}
 	}
@@ -260,7 +264,7 @@ void carregaListaDePaginas(FILE* file3, tipoLista **l){
 			lp = (tipoListaPaginas*)malloc(sizeof(tipoListaPaginas));
 			lp->pagina.id = idCorrigida;
 			lp->proximo = NULL;
-			fscanf(file3, "%u:%u,", &(lp->tempo), &(lp->pagina.nPagina));
+			fscanf(file3, "%u:%u,", &(lp->pagina.tempo), &(lp->pagina.nPagina));
 			posicaoAtual = ftell(file3);
 			fscanf(file3, "%c", &aux);
 			fscanf(file3, "%c", &aux2);
@@ -500,8 +504,8 @@ void executaProcesso(tipoLista **l, tipoQuadro *q){
     if(pAtual != NULL){
 		pgAtual = pAtual->processo.cabecaPg;
 		while(pgAtual != NULL){
-			if(pgAtual->tempo == pAtual->processo.tempoExecutando || pgAtual->pagina.nPagina == 0){
-				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina);
+			if(pgAtual->pagina.tempo == pAtual->processo.tempoExecutando || pgAtual->pagina.nPagina == 0){
+				gerenciaPaginas(q, pgAtual->pagina.id, pgAtual->pagina.nPagina, pgAtual->pagina.tempo);
 			}
 			pgAtual = pgAtual->proximo;
 		}
