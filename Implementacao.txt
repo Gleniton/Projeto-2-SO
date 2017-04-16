@@ -1,0 +1,70 @@
+###########FIFO#############
+
+A função de gerenciamento de páginas do FIFO recebe como parâmetro o ponteiro do quadro e os atributos da página a ser inserida.
+Usamos três variáveis auxiliares: 
+hit - para indicar se conseguimos um hit ou miss das páginas no quadro
+primeiroInserido - variável que guarda a posição do quadro que foi inserido a mais tempo
+nQuadroLivre - variável que guarda a posição do primeiro quadro livre encontrado
+
+Em seguida, percorremos todas as páginas do quadro para detectarmos se demos hit ou miss e também para encontrarmos o primeiro quadro livre
+caso existe e armazenamos a posição do mesmo.
+
+em caso de hit, pulamos a próxima etapa que é a de inserção
+em caso de miss, checamos se achamos um quadro livre anteriormente e inserimos a página na sua devida posição
+senão, percorremos o quadro novamente comparando todas as páginas até acharmos a página que foi inserida a mais tempo,  em seguida a substituímos
+pela nova página e notificamos uma falta de página caso esteja ativada
+
+em seguida, 
+	checamos se todos os quadros estão preenchidos e ativamos a notificação de falta de páginas caso positivo
+
+
+#################LRU######################
+
+Percorremos todos os quadros e verificamos a ocorrência de miss ou hit e páginas vazias
+Em caso de hit, zeramos a idade da página.
+Em caso de acharmos uma página vazia, guardamos a posição da mesma.
+Em caso de miss, aumentamos a idade das páginas que estão alocadas nos quadros.
+
+em caso de hit, pulamos a etapa de inserção
+em caso de miss, checamos se achamos um quadro livre anteriormente e inserimos a página na sua devida posição
+senão, percorremos todas as páginas verificando qual a mais velha, e em seguida a substituimos com a página nova e notificamos a falta caso 
+a notificação esteja ativada
+
+em seguida, checamos se todos os quadros estão preenchidos e ativamos a notificação de falta de páginas caso positivo.
+
+################Clock######################
+
+Percorremos todos os quadros e verificamos a ocorrencia de miss ou hit e páginas vazias
+
+em caso de hit, pulamos a etapa de inserção
+em caso de miss, checamos se achamos um quadro vazio anteriormente, mudamos o ponteiro para onde a página deve ser inserida, inserimos a nova
+página com sinal igual 1 e incrementamos o ponteiro.
+caso não tenha quadros livres, verificamos se o sinal da página a qual o ponteiro aponta é 0, se for, inserimos a página nessa posição e incrementamos o ponteiro
+senão, zeramos o sinal da página em que o ponteiro está apontando, incrementamos o ponteiro e repetimos a operação até encontrarmos uma página 
+com sinal 0. Quando a página com sinal 0 é encontrada, insermos a página nova na devida posição e incrementamos o ponteiro.
+Notificamos a falta de páginas caso a notificação esteja ativada
+
+
+Em seguida, checamos se todos os quadros estão preenchidos e ativamos a notificação de falta de páginas caso positivo.
+
+
+##############Ótimo########################
+
+
+Primeiramente, criamos uma estrutura chamada processoLeve que contém o mínimo de informações necessárias para simulação futura de um processo.
+
+Percorremos todos os quadros e verificamos a ocorrencia de miss ou hit e páginas vazias
+
+em caso de hit, pulamos a etapa de inserção
+em caso de miss, checamos se achamos um quadro vazio anteriormente, se positivo, inserimos a nova página no quadro vazio.
+Caso todos os casos estejam preenchidos, chamamos a função criaListaSimulacao contendo todas as páginas que serão usadas futuramente.
+A função criaListaSimulacao percorre todos os processo e todas as páginas do processo verificando e salvando numa lista todas as páginas que serão
+carregadas durante a simulação da lista de prontos com quantum igual a 2 nos tempos t e t+1 de execução do processo. Utilizamos um processoLeve
+para carregar o mínimo de informação necessária do processo e simular as modificações futuras que serão feitas no mesmo como mudanças de estado
+e alteração de estatísticas como tempo de execução, tempo de bloqueio e etc...
+Ao final do processo, a lista será devolvida para a função de gerenciamento de páginas.
+
+Com a lista de páginas que serão carregadas futuramente, percorremos todos os quadros e verificamos qual página será usada em um
+tempo mais distante ou até mesmo não ser usada e a substituimos com a nova página. Notificamos a falta de páginas caso a notificação esteja ativada
+
+Em seguida, checamos se todos os quadros estão preenchidos e ativamos a notificação de falta de páginas caso positivo
